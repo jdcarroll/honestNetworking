@@ -1,0 +1,19 @@
+{
+  "name": "honest",
+  "version": "1.0.0",
+  "description": "network monitor for local network forcused to on Object Oriented Programing",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdcarroll/honestNetworking.git"
+  },
+  "author": "Jeffrey David Carroll",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jdcarroll/honestNetworking/issues"
+  },
+  "homepage": "https://github.com/jdcarroll/honestNetworking#readme"
+}
