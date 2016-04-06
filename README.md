@@ -1,2 +1,2 @@
 # honestNetworking
-### the complete automated network monitor for local network
+### The complete automated network monitor for local network
