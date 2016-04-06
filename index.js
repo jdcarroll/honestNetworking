@@ -21,7 +21,7 @@ server.register(require('inert'), (err) => {
 
 	    socket.emit('connection', network.server.activeInterface());
 	
-	    var packetStream = network.packet.listen(socket);
+	    // var packetStream = network.packet.listen(socket);
 	    
 	    
 
