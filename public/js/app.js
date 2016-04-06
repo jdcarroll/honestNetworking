@@ -1,3 +1,21 @@
+var honestApp = angular.module('honest', ["ngRoute"])
+	.config(function($routeProvider){
+		$routeProvider
+			.when("/", {
+				templateUrl: 'views/login.html',
+				controller: "loginCtrl"
+			})
+			.when("/dashboard", {
+				templateUrl: 'views/dashboard.html',
+				controller: "dashboardCtrl"
+			})
+	})
+
+
+
+
+
+
 var socket = io()
 console.log('connected');
 

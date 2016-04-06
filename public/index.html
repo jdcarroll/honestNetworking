@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="honest">
 <head>
 	<title>Honest Abe - Network Monitor</title>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="/bower/angular/angular.min.js"></script>
+	<script src="/bower/angular-route/angular-route.min.js"></script>
 	<script src="js/app.js"></script>
+	<script src="js/factories/socket-factory.js"></script>
+	<script src="js/controllers/loginCtrl.js"></script>
+	
 </head>
 <body>
+	<input type="text" ng-model='name'></input>{{name}}
 	<button>Packet Capture</button>
+	<div ng-view></div>
 </body>
 </html>

@@ -52,8 +52,8 @@ module.exports = function(){
 			}
 		},
 		IpAddr : function(packet){
-			console.log('daddr:',packet.payload.payload.daddr)
-			console.log('saddr:',packet.payload.payload.saddr)
+			// console.log('daddr:',packet.payload.payload.daddr)
+			// console.log('saddr:',packet.payload.payload.saddr)
 		},
 		subnet : function(){
 			
@@ -65,8 +65,8 @@ module.exports = function(){
 			var packets = pcap.decode.packet(raw_packet);
 			var bandwidth = _packet.bandwidth.total(packets);
 			var ip = _packet.IpAddr(packets);
-			socket.emit('stream', packets);
-			socket.emit('bandwidth', bandwidth);
+			// socket.emit('stream', packets);
+			// socket.emit('bandwidth', bandwidth);
 		})
 	}
 // returned functions to main Server or index.js
