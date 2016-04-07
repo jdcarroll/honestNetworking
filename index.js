@@ -30,8 +30,5 @@ server.register([require('inert')], (err) => {
 })
 
 server.start(function () {
-		// var mongoose = server.plugins['hapi-mongoose'].lib;
-        // mongoose.connect(dbUrl, dbOtions, function(err) {
-            // if (err) server.log('error', err);
-        // });
+		console.log('Server is running at:', server.info.uri)
     });
