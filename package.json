@@ -20,6 +20,10 @@
     "hapi": "^13.3.0",
     "hapi-io": "0.0.11",
     "inert": "^3.2.0",
+    "mongojs": "^2.3.0",
+    "mongojsom": "^0.1.21",
+    "passport-local": "^1.0.0",
+    "pcap2": "^3.0.4",
     "socket.io-client": "^1.4.5"
   },
   "devDependencies": {

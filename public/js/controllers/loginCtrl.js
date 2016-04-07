@@ -1,13 +1,21 @@
-honestApp.controller('loginCtrl', function($scope, loginService, socket, $location){
+honestApp.controller('loginCtrl', function($scope, loginService, $location){
 	$scope.data = {}
 
 	$scope.login = function() {
-		loginService.loginUser($scope.data.username, $scope.data.password)
-			.success(function(data){
+		var cookie = loginService.loginUser($scope.data.username, $scope.data.password)
+			// .success(function(data){
+			// 	console.log(data);
+			// 	$location.path('/dashboard')
+			// }).error(function(data){
+			// 	console.log(data)
+			// 	console.log('fail');
+			// })
+
+			if(cookie != { status : 404 }){
 				$location.path('/dashboard')
-			}).error(function(data){
+			}else{
 				console.log('fail');
-			})
+			}
 
 		$scope.data = {}
 	}

@@ -1,5 +1,6 @@
 var os = require('os');
 var pcap = require('pcap2');
+var db = require('../db');
 
 module.exports = function(){
 
@@ -66,7 +67,7 @@ module.exports = function(){
 			var bandwidth = _packet.bandwidth.total(packets);
 			var ip = _packet.IpAddr(packets);
 			socket.emit('stream', packets);
-			socket.emit('bandwidth', bandwidth);
+			if(bandwidth) { socket.emit('bandwidth', bandwidth);}
 		})
 	}
 // returned functions to main Server or index.js

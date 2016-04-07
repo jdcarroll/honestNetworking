@@ -20,8 +20,27 @@ module.exports = function(){
 		}
 	}
 
+	_loginpost = {
+		method: 'POST',
+		path: '/loginpost',
+		handler: function(req, res){
+			var user = {
+				username : req.payload.username,
+				password : req.payload.password
+			}
+			
+			if (user.username == 'Jeff' && user.password == 'Jeff'){
+				var hash = 'dfgjfghnytfguhdfdfgndfgjdfgjsdfjhsrtuserakadfh';
+				res(hash);
+			}else {
+				console.log(user);
+			}
+		}
+	}
+
 	return {
 		public : _publicDir,
-		bower : _bower
+		bower : _bower,
+		loginpost: _loginpost
 	}
 }()

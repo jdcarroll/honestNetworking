@@ -7,7 +7,16 @@ var honestApp = angular.module('honest', ["ngRoute"])
 			})
 			.when("/dashboard", {
 				templateUrl: 'views/dashboard.html',
-				controller: "dashboardCtrl"
+				controller: "dashboardCtrl",
+				resolve: {
+					auth : function($location){
+						if(localStorage.userInfo){
+							$location.path('/dashboard')
+						}else {
+							$location.path('/')
+						}
+					}
+				}
 			})
 	})
 
