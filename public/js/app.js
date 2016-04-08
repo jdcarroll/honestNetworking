@@ -28,14 +28,22 @@ var honestApp = angular.module('honest', ["ngRoute"])
 var socket = io()
 console.log('connected');
 
-socket.on('connection', function(serverInfo){
-	console.log(serverInfo);
-});
+// socket.on('connection', function(serverInfo){
+// 	console.log(serverInfo);
+// });
 
-socket.on('stream', function(packetStream){
-	console.log(packetStream)
-})
+// socket.on('stream', function(packetStream){
+// 	console.log(packetStream)
+// })
 
-socket.on('bandwidth', function(bandwidth){
-	console.log(bandwidth)
+// socket.on('speed_test', function(speed){
+// 	console.log(speed)
+// })
+
+// socket.on('bandwidth', function(bandwidth){
+// 	console.log(bandwidth)
+// })
+
+socket.on('namp', function(report){
+	console.log(report);
 })

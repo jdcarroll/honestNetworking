@@ -1,3 +1,4 @@
+var network = require('../network');
 module.exports = function(){
 
 	_publicDir = {
@@ -7,6 +8,14 @@ module.exports = function(){
 			directory: {
 				path: 'public'
 			}
+		}
+	}
+
+	_dashboard = {
+		method: 'GET',
+		path: '/dashboard',
+		handler: function(req, res){
+			res(network.server.activeInterface())
 		}
 	}
 
