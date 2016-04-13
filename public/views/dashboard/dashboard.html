@@ -1,0 +1,48 @@
+<div class="ng-scope">
+  <div class="ng-scope">
+    <div id="wrapper" class="ng-scope">
+      <nav role="navigation" style="margin-bottom: 0" class="navbar navbar-default navbar-static-top">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span>                  <span class="icon-bar"></span>                  <span class="icon-bar"></span>                  <span class="icon-bar"></span></button>              <a ui-sref="dashboard.overview" class="navbar-brand">Honest Abe Monitoring</a>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+          <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i></a>
+            <ul class="dropdown-menu dropdown-user">
+              <li><a ui-sref="dashboard.settings"><i class="fa fa-gear fa-fw"></i>Settings</a></li>
+              <li><a ui-sref="dashboard.devices"><i class="fa fa-laptop fa-fw"></i>Devices</a></li>
+              <li class="divider"></li>
+              <li><a ui-sref="login"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+            </ul>
+            <!-- /.dropdown-user-->
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<div role="navigation" class="navbar-default sidebar">
+  <div class="sidebar-nav navbar-collapse">
+    <ul id="side-menu" class="nav in">
+      <li class="sidebar-search">
+        <div class="input-group custom-search-form">
+          <input type="text" placeholder="Search..." ng-model="search" class="form-control"/><span class="input-group-btn">
+            <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button></span>
+        </div>
+      </li>
+      <li ui-sref-active="active"><a href="/#/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+      <li ui-sref-active="active"><a ui-sref="dashboard.settings"><i class="fa fa-gear fa-fw"></i> Settings<span></span></a></li>
+      <li ui-sref-active="active"><a ui-sref="dashboard.devices"><i class="fa fa-laptop fa-fw"></i> Devices<span></span></a></li>
+        
+      </li>
+    </ul>
+  </div>
+</div>
+<div id="page-wrapper">
+	<div ui-view></div>
+</div>
+<!-- <a >Dashboard</a>
+
+<br>	
+<a ui-sref="dashboard.settings">Settings</a>
+<a ui-sref="dashboard.devices">Devices</a>
+ -->

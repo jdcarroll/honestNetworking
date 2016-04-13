@@ -4,6 +4,7 @@
   "description": "network monitor for local network forcused to on Object Oriented Programing",
   "main": "index.js",
   "scripts": {
+    "start": "node --max-old-space-size=2192 index.js 2> log/my_app_err.log",
     "test": "start"
   },
   "repository": {

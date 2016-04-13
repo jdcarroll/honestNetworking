@@ -1,20 +1,36 @@
 <!DOCTYPE html>
 <html ng-app="honest">
 <head>
-	<title>Honest Abe - Network Monitor</title>
-	<script src="/socket.io/socket.io.js"></script>
+	<title>Honest Abe Monitoring</title>
+	<!-- Styles -->
+	<link rel="stylesheet" href="/bower/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/sb-admin-2.css">
+    <link rel="stylesheet" href="/css/timeline.css">
+	<link rel="stylesheet" href="/bower/angular-loading-bar/build/loading-bar.min.css">
+	<link rel="stylesheet" href="/bower/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<!-- Bower Scripts -->
+	<script src="bower/jquery/dist/jquery.min.js"></script>
+	<script src="bower/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/bower/angular/angular.min.js"></script>
-	<script src="/bower/angular-route/angular-route.min.js"></script>
-	<script src="js/app.js"></script>
-	<script src="js/factories/socket-factory.js"></script>
+    <script src="bower/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <!-- Bower Scripts -->
+    <!-- Server Generated Files -->
+    <script src="/socket.io/socket.io.js"></script> 
+    <script src="js/app.js"></script>
+    <script src="js/factories/socket-factory.js"></script>
 	<script src="js/services/login-service.js"></script>
 	<script src="js/controllers/loginCtrl.js"></script>
+	<script src="js/controllers/settingsCtrl.js"></script>
 	<script src="js/controllers/dashboardCtrl.js"></script>
-	
+	<script src="js/controllers/overviewCtrl.js"></script>
+	<!-- Server Generated Files -->
 </head>
 <body>
-	<input type="text" ng-model='name'></input>{{name}}
-	<button>Packet Capture</button>
-	<div ng-view></div>
+
+	<div ui-view></div>
 </body>
 </html>

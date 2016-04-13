@@ -1,0 +1,63 @@
+Starting Nmap 7.00 ( https://nmap.org ) at 2016-04-09 14:48 EDT
+Nmap scan report for 10.2.0.27
+Host is up (0.015s latency).
+Not shown: 499 closed ports, 492 filtered ports
+PORT     STATE SERVICE            VERSION
+22/tcp   open  ssh                OpenSSH 6.2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 83:73:33:04:51:ab:59:bd:4e:e4:92:f0:c0:58:16:44 (DSA)
+|_  2048 d1:bb:8e:d3:50:88:fb:fc:a8:4c:c3:ed:f8:ac:d2:3f (RSA)
+25/tcp   open  smtp               Postfix smtpd
+|_smtp-commands: SMTP: EHLO 220 jcarroll.local ESMTP Postfix
+80/tcp   open  http               Apache httpd 2.2.26 ((Unix) DAV/2 PHP/5.5.0 mod_ssl/2.2.26 OpenSSL/0.9.8za)
+|_http-server-header: Apache/2.2.26 (Unix) DAV/2 PHP/5.5.0 mod_ssl/2.2.26 OpenSSL/0.9.8za
+|_http-title: Site doesn't have a title (text/html).
+445/tcp  open  microsoft-ds?
+548/tcp  open  afp                Apple AFP (name: Jeff Carroll's Computer (3); protocol 3.4; Mac OS X 10.9 - 10.10; MacBookPro6,1)
+| afp-serverinfo: 
+|   Server Flags: 
+|     Flags hex: 0x9ff3
+|     Super Client: true
+|     UUIDs: true
+|     UTF8 Server Name: true
+|     Open Directory: true
+|     Reconnect: true
+|     Server Notifications: true
+|     TCP/IP: true
+|     Server Signature: true
+|     Server Messages: false
+|     Password Saving Prohibited: false
+|     Password Changing: true
+|     Copy File: true
+|   Server Name: Jeff Carroll's Computer (3)
+|   Machine Type: MacBookPro6,1
+|   AFP Versions: AFP3.4, AFP3.3, AFP3.2, AFP3.1, AFPX03
+|   UAMs: DHCAST128, DHX2, Recon1, Client Krb v2, GSS
+|   Server Signature: 2772afa1b83f59aabd94d1fe5a37d28d
+|   Network Addresses: 
+|     10.2.0.27:548
+|     [fe80:0000:0000:0000:e6ce:8fff:fe76:6d49]:548
+|     [0000:0000:0000:0000:e6ce:8fff:fe76:6d49]:548
+|     [0000:0000:0000:0000:a190:edba:8015:2809]:548
+|     10.2.0.27
+|   Directory Names: 
+|     afpserver/jcarroll.local@LOCAL
+|_  UTF8 Server Name: Jeff Carroll's Computer (3)
+587/tcp  open  smtp               Postfix smtpd
+|_smtp-commands: jcarroll.local, PIPELINING, SIZE 10485760, VRFY, ETRN, STARTTLS, ENHANCEDSTATUSCODES, 8BITMIME, DSN, BINARYMIME, CHUNKING, 
+625/tcp  open  apple-xsrvr-admin?
+3306/tcp open  mysql              MySQL (unauthorized)
+5900/tcp open  vnc                Apple remote desktop vnc
+| vnc-info: 
+|   Protocol version: 3.889
+|   Security types: 
+|     Mac OS X security type (30)
+|     VNC Authentication (2)
+|_    Mac OS X security type (35)
+Service Info: Hosts: -jcarroll.local,  jcarroll.local; OS: Mac OS X; CPE: cpe:/o:apple:mac_os_x:10.9, cpe:/o:apple:mac_os_x
+
+Host script results:
+|_nbstat: NetBIOS name: JEFFIDTMAC, NetBIOS user: <unknown>, NetBIOS MAC: e4:ce:8f:76:6d:49 (Apple)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 74.38 seconds

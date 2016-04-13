@@ -19,6 +19,14 @@ module.exports = function(){
 		}
 	}
 
+	_addUser = {
+		method: 'POST',
+		path: '/addUser',
+		handler: function(req, res){
+			console.log(req.payload);
+		}
+	}
+
 	_bower = {
 		method: 'GET',
 		path: '/bower/{param*}',
@@ -50,6 +58,7 @@ module.exports = function(){
 	return {
 		public : _publicDir,
 		bower : _bower,
-		loginpost: _loginpost
+		loginpost: _loginpost,
+		addUser: _addUser
 	}
 }()

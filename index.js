@@ -15,7 +15,8 @@ server.register([require('inert')], (err) => {
 	server.route([ 
 			routes.public,
 			routes.bower,
-			routes.loginpost
+			routes.loginpost,
+			routes.addUser
 		])
 
 
@@ -31,14 +32,14 @@ server.register([require('inert')], (err) => {
 	      ]
 	    };
 
-		nmap.scan(opts, function(err, report) {
-		  if (err) throw new Error(err);
+		// nmap.scan(opts, function(err, report) {
+		//   if (err) throw new Error(err);
 
-		  for (var item in report) {
-		    console.log(report[item]);
-		    socket.emit('namp', report[item])
-		  }
-		});
+		//   for (var item in report) {
+		//     console.log(report[item]);
+		//     socket.emit('namp', report[item])
+		//   }
+		// });
 
    		var packetStream = network.packet.listen(socket);
    	

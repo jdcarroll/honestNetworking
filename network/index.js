@@ -2,7 +2,7 @@ var os = require('os');
 var pcap = require('pcap2');
 var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','devices']);
 var ipaddr = require('ipaddr.js');
-var nmap = require('libnmap');
+var nmap = require('node-libnmap');
 
 module.exports = function(){
 
@@ -48,19 +48,17 @@ module.exports = function(){
 	_packet = {
 		chunk : [],
 		nMap : function(ip){
-			console.log('nmap kickoff')
 			var opts = {
 				range : ip
 			}
-			console.log('fail after opts')
-			nmap.scan(opts, function(err, report){
-				console.log('scan started...');
-				if (err) throw new Error(err);
+			// nmap.scan(opts, function(err, report){
+			// 	console.log('scan started...');
+			// 	if (err) throw new Error(err);
 
-				for (var item in report){
-					console.log(JSON.stringify(report[item]));
-				}
-			})
+			// 	for (var item in report){
+			// 		console.log(JSON.stringify(report[item]));
+			// 	}
+			// })
 		},
 		nMap_preStore : [],
 		nMap_collectIp : function(ip){
@@ -87,32 +85,50 @@ module.exports = function(){
 		pcapSession : new pcap.Session('en0'),
 		bandwidth : {
 			total : function(data){				
-				_packet.chunk.push(data);
-				if(_packet.chunk.length == 10){
-					var start = _packet.chunk[0].pcap_header.tv_sec;
-					var sMill = _packet.chunk[0].pcap_header.tv_usec;
-					var startMill = sMill / 1000000;
-					var startTime = start + startMill;
-					var end = _packet.chunk[9].pcap_header.tv_sec;
-					var eMill = _packet.chunk[9].pcap_header.tv_usec;
-					var endMill = eMill / 1000000;
-					var endTime = end + endMill;
-					var time = endTime - startTime;				
-					_packet.chunk.forEach(function(e){
-						_packet.packetSize_total += e.pcap_header.len
-					})
-					var bandwidth = (_packet.packetSize_total / time)
-					var mbps = bandwidth / 1000000
-					_packet.chunk = [];
-					_packet.packetSize_total = 0;
+					_packet.chunk.push(data);
+					if(_packet.chunk.length == 1000){
+						var mbps = 0;
+						var start = _packet.chunk[0].pcap_header.tv_sec;
+						var sMill = _packet.chunk[0].pcap_header.tv_usec;
+						var startMill = sMill / 1000000;
+						var startTime = start + startMill;
+						var end = _packet.chunk[9].pcap_header.tv_sec;
+						var eMill = _packet.chunk[9].pcap_header.tv_usec;
+						var endMill = eMill / 1000000;
+						var endTime = end + endMill;
+						var time = endTime - startTime;				
+						_packet.chunk.forEach(function(e){
+							_packet.packetSize_total += e.pcap_header.len
+						})
+						var bandwidth = (_packet.packetSize_total / time)
+						var mbps = bandwidth / 1000000
+						_packet.chunk = [];
+						_packet.packetSize_total = 0;
 
-					return {
-						bandwidth: mbps
+						_packet.set_int(mbps);
 					}
+				},
+			
+			},
+			count : 0,
+			total : 0,
+			packet_average : 0,
+			set_int : function(data){
+				if(data == 0){
+					/* Do Nothing */
+				}else{
+					_packet.total += data;
+					_packet.count ++;
 				}
-			}
-		}
-	},
+			},
+			counter : function(){
+						result = _packet.total / _packet.count;
+						_packet.total = 0;
+						_packet.count = 0;
+						return result;
+					}
+
+		},
 	_packet.IpAddr = function(packet){
 		var ipObj = new Promise(function(resolve, reject){
 				try {
@@ -154,13 +170,20 @@ module.exports = function(){
 		var range = ipaddr.IPv4.parse(interface.netmask).prefixLengthFromSubnetMask();
 		if (packet) {
 			if (range <= 8){
-			console.log('A class subnet')
 			}
 			if (range > 8 && range <= 16){
-				console.log('B class subnet')
+				var IPmatch = interface.classB
+				if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1])){
+					var ipDestString = packet.destIp.toString()
+					_packet.nMap_collectIp(ipDestString)
+				}
+				if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1])){
+					var ipSendString = packet.sendIp.toString()
+					// console.log('sendIp:',packet.sendIp)
+					// console.log('sendIp:',ipSendString)
+				}
 			}
 			if (range > 16){
-				console.log('C class subnet')
 				var IPmatch = interface.classC
 				if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1]) && (packet.destIp[2] == IPmatch[2])){
 					var ipDestString = packet.destIp.toString()
@@ -175,38 +198,31 @@ module.exports = function(){
 			}
 		} else {/*Do Nothing*/}
 
-		// if(interface.netmask == '255.0.0.0'){
-		// 	// A class Subnet =======================================
-		// }
-		// if(interface.netmask == '255.255.192.0'){
-		// 	// B class Subnet =======================================
-		// }
-		// if(interface.netmask == '255.255.255.0'){
-		// 	// C class Subnet =======================================
-		// 	console.log('C class Subnet =======================================')
-		// 	var addr = interface.address.split(".");
-		// 	addr.pop();
-		// 	var IPmatch = addr[0] + "." + addr[1] + "." + addr[2]
-		// 	return IPmatch
-		// }
 	},
 // activate the socket sniffer 
+	
 	_packet.listen = function(socket){
 		_packet.pcapSession.on('packet', function(raw_packet){
 			var packets = pcap.decode.packet(raw_packet);
 			var bandwidth = _packet.bandwidth.total(packets);
 			var ip = _packet.IpAddr(packets);
-			_packet.subnet(ip);
-			socket.emit('stream', packets);
-			// if(bandwidth) { 
-			// 	data = {
-			// 		speed : bandwidth,
-			// 		time : Date.now()
-			// 	}
-			// 	socket.emit('bandwidth', data);
+			
+			setInterval(function(){
+				 // var bandwidthAverage = _packet.counter()
+				 console.log('bandwidthAverage:');
+			}, 30000);
+			
+			// socket.emit('stream', packets);
+			if(bandwidth) { 
+				data = {
+					speed : bandwidthAverage,
+					time : Date.now()
+				}
+				// console.log(data);
+				socket.emit('bandwidth', data);
 
-			// 	db.usageBandwidth.save(data);
-			// }
+				// db.usageBandwidth.save(data);
+			}
 		})
 	}
 // returned functions to main Server or index.js
@@ -215,3 +231,6 @@ module.exports = function(){
 		server: _server
 	}
 }()
+
+
+

@@ -1,24 +1,31 @@
-var honestApp = angular.module('honest', ["ngRoute"])
-	.config(function($routeProvider){
-		$routeProvider
-			.when("/", {
-				templateUrl: 'views/login.html',
-				controller: "loginCtrl"
-			})
-			.when("/dashboard", {
-				templateUrl: 'views/dashboard.html',
-				controller: "dashboardCtrl",
-				resolve: {
-					auth : function($location){
-						if(localStorage.userInfo){
-							$location.path('/dashboard')
-						}else {
-							$location.path('/')
-						}
-					}
-				}
-			})
-	})
+var honestApp = angular.module('honest', ["ui.router"])
+	
+honestApp.config(function($stateProvider, $urlRouterProvider){
+	$stateProvider
+		.state('login', {
+			url: "/login",
+			templateUrl: "views/login.html"
+		})
+		.state('dashboard', {
+			url: "/dashboard",
+			templateUrl: "views/dashboard/dashboard.html"
+		})
+		.state('dashboard.overview', {
+			url: "/overview",
+			templateUrl: "views/dashboard/overview.html",
+			controller: 'overviewCtrl'
+		})
+		.state('dashboard.settings', {
+			url: "/settings",
+			templateUrl: "views/dashboard/settings.html",
+			controller: 'settingsCtrl'
+		})
+		.state('dashboard.devices', {
+			url: "/devices",
+			templateUrl: "views/dashboard/devices.html"
+		});
+		$urlRouterProvider.otherwise('dashboard/overview');
+})
 
 
 
@@ -26,8 +33,6 @@ var honestApp = angular.module('honest', ["ngRoute"])
 
 
 var socket = io()
-console.log('connected');
-
 // socket.on('connection', function(serverInfo){
 // 	console.log(serverInfo);
 // });
@@ -36,14 +41,13 @@ console.log('connected');
 // 	console.log(packetStream)
 // })
 
-// socket.on('speed_test', function(speed){
-// 	console.log(speed)
-// })
 
-// socket.on('bandwidth', function(bandwidth){
-// 	console.log(bandwidth)
-// })
 
-socket.on('namp', function(report){
-	console.log(report);
+socket.on('bandwidth', function(bandwidth){
+	console.log('hello from appjs bandwidth')
+	// console.log(bandwidth)
 })
+
+// socket.on('namp', function(report){
+// 	console.log(report);
+// })

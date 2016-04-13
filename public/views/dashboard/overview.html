@@ -1,0 +1,43 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Dashboard</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h5>Bandwidth Chart <small>{{ day.date.date }} {{ day.date.month }} {{ day.date.year }}</small></h5>
+			</div>
+			<div class="panel-body">
+				<canvas id="updating-chart"></canvas>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h5>Top players</h5>
+			</div>
+			<div class="panel-body">
+				
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h5>Speed Test Results</h5>
+			</div>
+			<div class="panel-body">
+				<p>ISP : {{ speedTest.client.isp }}</p>
+				<p>External IP : {{ speedTest.client.ip }}</p>
+				<p>Test Host : {{ speedTest.server.host }}</p>
+				<p>Download : <strong>{{ speedTest.speeds.download }}</strong></p>
+				<p>Upload : <strong>{{ speedTest.speeds.upload }}</strong></p>
+			</div>
+		</div>
+	</div>
+</div>
