@@ -25,22 +25,6 @@ server.register([require('inert')], (err) => {
 
     	socket.emit('connection', global.honestServer);
 
-    	var opts = {
-	      range: [
-	        'scanme.nmap.org',
-	        '10.2.0.25',
-	      ]
-	    };
-
-		// nmap.scan(opts, function(err, report) {
-		//   if (err) throw new Error(err);
-
-		//   for (var item in report) {
-		//     console.log(report[item]);
-		//     socket.emit('namp', report[item])
-		//   }
-		// });
-
    		var packetStream = network.packet.listen(socket);
    	
    		setInterval(function(){

@@ -1,8 +1,12 @@
+// Network.js
+
 var os = require('os');
 var pcap = require('pcap2');
 var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','devices']);
 var ipaddr = require('ipaddr.js');
-var nmap = require('node-libnmap');
+var ping = require('../ping');
+// var devices = require('../devices');
+// var nmap = require('node-libnmap');
 
 module.exports = function(){
 
@@ -41,24 +45,42 @@ module.exports = function(){
 					classC : [ localAddress[0], localAddress[1], localAddress[2] ]
 				}
 				global.honestServer = globalInterface 
+				_packet.specifyClass();
+				global.honestServer.subnetRange
+				ping(global.honestServer.subnetRange);
 				resolve(activeInterface);
 			}) 
+	_devices = {
 
+	}
 // define the packet object that sniffs the network for all activity accross the network
 	_packet = {
+		specifyClass : function(){
+			var range = ipaddr.IPv4.parse(global.honestServer.netmask).prefixLengthFromSubnetMask();
+			if(range <= 8){
+				delete global.honestServer.classC;
+				delete global.honestServer.classB;
+				global.honestServer.subnetRange = global.honestServer.classA
+				delete global.honestServer.classA;
+			}
+			if(range > 8 && range <= 16){
+				delete global.honestServer.classA;
+				delete global.honestServer.classC;
+				global.honestServer.subnetRange = global.honestServer.classB
+				delete global.honestServer.classB;
+			}
+			if(range > 16){
+				delete global.honestServer.classA;
+				delete global.honestServer.classB;
+				global.honestServer.subnetRange = global.honestServer.classC
+				delete global.honestServer.classC;
+			}
+		},
 		chunk : [],
 		nMap : function(ip){
 			var opts = {
 				range : ip
 			}
-			// nmap.scan(opts, function(err, report){
-			// 	console.log('scan started...');
-			// 	if (err) throw new Error(err);
-
-			// 	for (var item in report){
-			// 		console.log(JSON.stringify(report[item]));
-			// 	}
-			// })
 		},
 		nMap_preStore : [],
 		nMap_collectIp : function(ip){
@@ -85,50 +107,49 @@ module.exports = function(){
 		pcapSession : new pcap.Session('en0'),
 		bandwidth : {
 			total : function(data){				
-					_packet.chunk.push(data);
-					if(_packet.chunk.length == 1000){
-						var mbps = 0;
-						var start = _packet.chunk[0].pcap_header.tv_sec;
-						var sMill = _packet.chunk[0].pcap_header.tv_usec;
-						var startMill = sMill / 1000000;
-						var startTime = start + startMill;
-						var end = _packet.chunk[9].pcap_header.tv_sec;
-						var eMill = _packet.chunk[9].pcap_header.tv_usec;
-						var endMill = eMill / 1000000;
-						var endTime = end + endMill;
-						var time = endTime - startTime;				
-						_packet.chunk.forEach(function(e){
-							_packet.packetSize_total += e.pcap_header.len
-						})
-						var bandwidth = (_packet.packetSize_total / time)
-						var mbps = bandwidth / 1000000
-						_packet.chunk = [];
-						_packet.packetSize_total = 0;
+				_packet.chunk.push(data);
+				if(_packet.chunk.length == 1000){
+					var mbps = 0;
+					var start = _packet.chunk[0].pcap_header.tv_sec;
+					var sMill = _packet.chunk[0].pcap_header.tv_usec;
+					var startMill = sMill / 1000000;
+					var startTime = start + startMill;
+					var end = _packet.chunk[9].pcap_header.tv_sec;
+					var eMill = _packet.chunk[9].pcap_header.tv_usec;
+					var endMill = eMill / 1000000;
+					var endTime = end + endMill;
+					var time = endTime - startTime;				
+					_packet.chunk.forEach(function(e){
+						_packet.packetSize_total += e.pcap_header.len
+					})
+					var bandwidth = (_packet.packetSize_total / time)
+					var mbps = bandwidth / 1000000
+					_packet.chunk = [];
+					_packet.packetSize_total = 0;
 
-						_packet.set_int(mbps);
-					}
-				},
-			
-			},
-			count : 0,
-			total : 0,
-			packet_average : 0,
-			set_int : function(data){
-				if(data == 0){
-					/* Do Nothing */
-				}else{
-					_packet.total += data;
-					_packet.count ++;
+					_packet.set_int(mbps);
 				}
-			},
-			counter : function(){
-						result = _packet.total / _packet.count;
-						_packet.total = 0;
-						_packet.count = 0;
-						return result;
-					}
-
+			},	
 		},
+
+		count : 0,
+		total : 0,
+		packet_average : 0,
+		set_int : function(data){
+			if(data == 0){
+				/* Do Nothing */
+			}else{
+				_packet.total += data;
+				_packet.count ++;
+			}
+		},
+		counter : function(){
+				result = _packet.total / _packet.count;
+				_packet.total = 0;
+				_packet.count = 0;
+				return result;
+		}
+	},
 	_packet.IpAddr = function(packet){
 		var ipObj = new Promise(function(resolve, reject){
 				try {
@@ -172,7 +193,7 @@ module.exports = function(){
 			if (range <= 8){
 			}
 			if (range > 8 && range <= 16){
-				var IPmatch = interface.classB
+				var IPmatch = interface.subnetRange
 				if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1])){
 					var ipDestString = packet.destIp.toString()
 					_packet.nMap_collectIp(ipDestString)
@@ -184,7 +205,7 @@ module.exports = function(){
 				}
 			}
 			if (range > 16){
-				var IPmatch = interface.classC
+				var IPmatch = interface.subnetRange
 				if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1]) && (packet.destIp[2] == IPmatch[2])){
 					var ipDestString = packet.destIp.toString()
 					_packet.nMap_collectIp(ipDestString)
