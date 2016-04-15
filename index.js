@@ -8,6 +8,7 @@ server.connection({ port: 4000 });
 var Test = require('./speedtest');
 var io = require('socket.io')(server.listener);
 var nmap = require('libnmap');
+var users = require('./users');
 server.register([require('inert')], (err) => {
 	if (err){
 		throw err
