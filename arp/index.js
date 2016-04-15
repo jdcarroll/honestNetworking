@@ -54,8 +54,17 @@ Promise.all([checkMacDb, arp]).then(function(values){
 		macCompare.push(e.mac);
 	})
 	var newNmaps = utils.arrayDiffOnce(checkDbResults, macCompare);
+	newNmaps.forEach(function(e){
+		arpResults.devices.forEach(function(d){
+			if( e == d.mac ){
+				console.log('d:',d.ip);
+				console.log(typeof(d.ip));
+				nmap(d);
+			}
+		})
+	})
 	for (var i = 0; i < arpResults.devices.length; i++){
-		
+
 	}
 	console.log('dbResults:',checkDbResults);
 	console.log('macs:',macCompare);

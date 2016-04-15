@@ -19,11 +19,13 @@ var computer = function(computer){
 				var hostname = [];
 				var device = {
 					cpe : [],
-					hostname : []
+					hostname : [],
+					port : []
 				}
 				try{
 					portData[0].port.forEach(function(e){
 						e.service.forEach(function(a){
+							device.port.push(a.$);
 							// iPhone Profile ---------------------------------
 							//console.log(a.$);
 							// iPhone Profile ---------------------------------
@@ -35,6 +37,7 @@ var computer = function(computer){
 								device.info = a.$.extrainfo;
 								device.type = a.$.devicetype;
 								device.ostype = a.$.ostype;
+								
 							}
 							// UPnP Profile ---------------------------------
 
@@ -60,7 +63,7 @@ var computer = function(computer){
 								}
 							}
 							// Apple Mackbook Pro Profile ----------------------------------------------
-							device.ports = portData;
+							
 						})
 					})
 					device.mac = computer.mac;
@@ -75,16 +78,11 @@ var computer = function(computer){
 		console.log( val.ip + ' Device---------------------------------------------------------')
 		console.log(val);
 		console.log('--------------------------------------------------------------------------')
-		db.devices.save(val);
+		db.devices.insert(val, function(err, docs){
+			if(err) {throw err}
+		});
 	})
-
-	var checkDb = new Promise(function(resolve, reject){
-		
-	})
-
 }
-
-
 
 module.exports = computer
 
