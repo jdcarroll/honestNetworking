@@ -126,9 +126,9 @@ module.exports = function(){
 					var mbps = bandwidth / 1000000
 					_packet.chunk = [];
 					_packet.packetSize_total = 0;
-
-					_packet.set_int(mbps);
+					_packet.set_int(mbps);				
 				}
+				return 
 			},	
 		},
 
@@ -223,27 +223,37 @@ module.exports = function(){
 // activate the socket sniffer 
 	
 	_packet.listen = function(socket){
+		setInterval(function(){
+			 var bandwidthAverage = _packet.counter()
+			 
+			 if(bandwidthAverage){
+
+			 	data = {
+					speed : bandwidthAverage / 10000,
+					time : Date.now()
+				}
+			 	socket.emit('bandwidth', data);
+			 	console.log('bandwidthAverage:', data);
+			 }
+			 
+		}, 3000);
 		_packet.pcapSession.on('packet', function(raw_packet){
 			var packets = pcap.decode.packet(raw_packet);
 			var bandwidth = _packet.bandwidth.total(packets);
 			var ip = _packet.IpAddr(packets);
+			// console.log('bandwidth:', bandwidth);
 			
-			setInterval(function(){
-				 // var bandwidthAverage = _packet.counter()
-				 console.log('bandwidthAverage:');
-			}, 30000);
 			
 			// socket.emit('stream', packets);
-			if(bandwidth) { 
-				data = {
-					speed : bandwidthAverage,
-					time : Date.now()
-				}
-				// console.log(data);
-				socket.emit('bandwidth', data);
+			// if(bandwidth) { 
+				
+			// 	// console.log(data);
+			// 	// socket.emit('bandwidth', data);
 
-				// db.usageBandwidth.save(data);
-			}
+			// 	// db.usageBandwidth.save(data);
+			// }else{
+			// 	console.log('Fridays: seth is awesome!!!')
+			// }
 		})
 	}
 // returned functions to main Server or index.js

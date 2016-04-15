@@ -36,7 +36,7 @@ honestApp.controller('overviewCtrl', function($scope, socket){
 	socket.on('bandwidth', function(bandwidth){
 		console.log('hello from overviewCtrl bandwidth');
 		format = timeConverter(bandwidth.time);
-		myLiveChart.addData([bandwidth.speed.bandwidth], format.time);
+		myLiveChart.addData([bandwidth.speed], format.time);
 		myLiveChart.removeData();
 	})
 

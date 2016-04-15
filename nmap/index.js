@@ -70,7 +70,7 @@ var computer = function(computer){
 					device.ip = computer.ip;
 					resolve(device);
 				}catch(err){
-					console.log(err);
+					// console.log(err);
 				}
 			})
 		 });

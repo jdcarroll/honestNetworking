@@ -20,22 +20,24 @@ server.register([require('inert')], (err) => {
 			routes.addUser
 		])
 
-
-
-	io.on('connection', function (socket) {
-
-    	socket.emit('connection', global.honestServer);
-
-   		var packetStream = network.packet.listen(socket);
-   	
-   		setInterval(function(){
-   			Test(socket)
-   		}, 10000)
-
-	});
 })
+
+io.on('connection', function (socket) {
+	console.log('socket:', socket.id);
+	socket.emit('connection', global.honestServer);
+
+	var packetStream = network.packet.listen(socket);
+
+	setInterval(function(){
+		Test(socket)
+	}, 10000)
+
+});
 
 server.start(function () {
 		network.server;
 		console.log('Server is running at:', server.info.uri)
     });
+
+// query: { EIO: '3', transport: 'polling', t: 'LGS22jw' } } }
+//  query: { EIO: '3', transport: 'polling', t: 'LGS22jv' } } }
