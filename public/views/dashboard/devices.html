@@ -1,1 +1,22 @@
-devices.html
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Local Devices</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-4" ng-repeat="device in devices track by $index">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ device.hostname }}
+			</div>
+			<div class="panel-body">
+				<ul>
+					<li>Type : {{ device.type }}</li>
+					<li>OS : {{ device.ostype }}</li>
+					<li>ip address: {{ device.ip }} </li>
+					<li>Mac address: {{ device.mac }}  </li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

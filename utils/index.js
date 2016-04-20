@@ -3,10 +3,6 @@
 module.exports = {
 
 	arrayDiffOnce : function(a1, a2) {
-		console.log('hello from arr_diff')
-		/* for every value in a2 
-		if not in a1 
-			insert into return array*/
 
 		returnArray = [];
 
@@ -15,40 +11,7 @@ module.exports = {
             returnArray.push(a2[i]);
         }
     }
-    return returnArray
-	//     var a = [], diff = [];
-
-	//     for (var i = 0; i < a1.length; i++) {
-	    	
-	//         a[a1[i]] = true;
-	//     }
-
-	//     for (var i = 0; i < a2.length; i++) {
-	//         if (a[a2[i]]) {
-	//             delete a[a2[i]];
-	//         } else {
-	//             a[a2[i]] = true;
-	//         } 
-	//     }
-
-	//     for (var i = 0; i < a1.length; i++) {
-	//         if (a[a1[i]]) {
-	//             delete a[a1[i]];
-	//         } 
-	//     }
-	    
-	//     for (var k in a) {
-	//         diff.push(k);
-	//     }
-
-	//     for( var i = 0; i < diff.length; i++){
-
-	//     	if (diff[a1[i]]) {
-	//     		delete diff[a1[i]];
-	//     	}
-	//     }
-
-	//     return diff;
+    return returnArray 
 	},
 
 	getMatch: function(a, b) {

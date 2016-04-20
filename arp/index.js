@@ -11,7 +11,7 @@ var arp = new Promise(function(resolve, reject){
 		var array = stdout.split('\n');
 		array.pop();
 		var result = [];
-		var str = global.honestServer.subnetRange.toString()
+		var str = global.honestServer.subnetRange.toString();
 		var broadcast = str.replace(/,/g,'.');
 		array.forEach(function(e){
 			var item = e.split(' ');
@@ -46,7 +46,6 @@ var checkMacDb = new Promise(function(resolve, reject){
 });
 
 Promise.all([checkMacDb, arp]).then(function(values){
-	console.log('running');
 	var checkDbResults = values[0]
 	var arpResults = values[1]
 	macCompare = []
@@ -57,8 +56,6 @@ Promise.all([checkMacDb, arp]).then(function(values){
 	newNmaps.forEach(function(e){
 		arpResults.devices.forEach(function(d){
 			if( e == d.mac ){
-				console.log('d:',d.ip);
-				console.log(typeof(d.ip));
 				nmap(d);
 			}
 		})
@@ -66,9 +63,6 @@ Promise.all([checkMacDb, arp]).then(function(values){
 	for (var i = 0; i < arpResults.devices.length; i++){
 
 	}
-	console.log('dbResults:',checkDbResults);
-	console.log('macs:',macCompare);
-	console.log('newNmaps:',newNmaps);
 
 }).catch(function(err){
 	console.log(err);

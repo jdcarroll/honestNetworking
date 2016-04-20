@@ -5,8 +5,6 @@ var pcap = require('pcap2');
 var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','devices']);
 var ipaddr = require('ipaddr.js');
 var ping = require('../ping');
-// var devices = require('../devices');
-// var nmap = require('node-libnmap');
 
 module.exports = function(){
 
@@ -45,7 +43,9 @@ module.exports = function(){
 					classC : [ localAddress[0], localAddress[1], localAddress[2] ]
 				}
 				global.honestServer = globalInterface 
+				console.log('running before');
 				_packet.specifyClass();
+				console.log('running after');
 				global.honestServer.subnetRange
 				ping(global.honestServer.subnetRange);
 				resolve(activeInterface);
@@ -55,21 +55,39 @@ module.exports = function(){
 	}
 // define the packet object that sniffs the network for all activity accross the network
 	_packet = {
+		ipDeviceDetection : function(packet){
+			try {
+				var destIp = packet.payload.payload.daddr.addr.toString();
+				var sendIp = packet.payload.payload.saddr.addr.toString();
+				var subnet = global.honestServer.subnetRange.toString();
+				var address = global.honestServer.address;
+			
+				if (destIp != '10,2,0,23'){
+					console.log('destIp:',destIp)
+					console.log('sendIp:',sendIp)
+				}
+			} catch (err){
+				console.log(err);
+			}
+		
+		},
 		specifyClass : function(){
+			console.log(global.honestServer.netmask);
 			var range = ipaddr.IPv4.parse(global.honestServer.netmask).prefixLengthFromSubnetMask();
+			console.log(range);
 			if(range <= 8){
 				delete global.honestServer.classC;
 				delete global.honestServer.classB;
 				global.honestServer.subnetRange = global.honestServer.classA
 				delete global.honestServer.classA;
 			}
-			if(range > 8 && range <= 16){
+			if(range > 8 && range <= 23){
 				delete global.honestServer.classA;
 				delete global.honestServer.classC;
 				global.honestServer.subnetRange = global.honestServer.classB
 				delete global.honestServer.classB;
 			}
-			if(range > 16){
+			if(range >= 24 ){
 				delete global.honestServer.classA;
 				delete global.honestServer.classB;
 				global.honestServer.subnetRange = global.honestServer.classC
@@ -200,8 +218,6 @@ module.exports = function(){
 				}
 				if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1])){
 					var ipSendString = packet.sendIp.toString()
-					// console.log('sendIp:',packet.sendIp)
-					// console.log('sendIp:',ipSendString)
 				}
 			}
 			if (range > 16){
@@ -212,8 +228,6 @@ module.exports = function(){
 				}
 				if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
 					var ipSendString = packet.sendIp.toString()
-					// console.log('sendIp:',packet.sendIp)
-					// console.log('sendIp:',ipSendString)
 				}
 
 			}
@@ -233,30 +247,21 @@ module.exports = function(){
 					time : Date.now()
 				}
 			 	socket.emit('bandwidth', data);
-			 	console.log('bandwidthAverage:', data);
 			 }
 			 
 		}, 3000);
-		_packet.pcapSession.on('packet', function(raw_packet){
-			var packets = pcap.decode.packet(raw_packet);
-			var bandwidth = _packet.bandwidth.total(packets);
-			var ip = _packet.IpAddr(packets);
-			// console.log('bandwidth:', bandwidth);
-			
-			
-			// socket.emit('stream', packets);
-			// if(bandwidth) { 
-				
-			// 	// console.log(data);
-			// 	// socket.emit('bandwidth', data);
+		try{
+			_packet.pcapSession.on('packet', function(raw_packet){
 
-			// 	// db.usageBandwidth.save(data);
-			// }else{
-			// 	console.log('Fridays: seth is awesome!!!')
-			// }
-		})
+				var packets = pcap.decode.packet(raw_packet);
+				var bandwidth = _packet.bandwidth.total(packets);
+				var ip = _packet.IpAddr(packets);
+				var dd = _packet.ipDeviceDetection(packets);
+			})
+		}catch(err){
+			console.log(err);
+		}
 	}
-// returned functions to main Server or index.js
 	return {
 		packet: _packet,
 		server: _server

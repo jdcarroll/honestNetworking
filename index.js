@@ -9,6 +9,7 @@ var Test = require('./speedtest');
 var io = require('socket.io')(server.listener);
 var nmap = require('libnmap');
 var users = require('./users');
+var devices = require('./devices');
 server.register([require('inert')], (err) => {
 	if (err){
 		throw err
@@ -23,8 +24,9 @@ server.register([require('inert')], (err) => {
 })
 
 io.on('connection', function (socket) {
-	console.log('socket:', socket.id);
 	socket.emit('connection', global.honestServer);
+
+	devices(socket);
 
 	var packetStream = network.packet.listen(socket);
 
@@ -33,6 +35,8 @@ io.on('connection', function (socket) {
 	}, 10000)
 
 });
+
+
 
 server.start(function () {
 		network.server;

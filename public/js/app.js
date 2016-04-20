@@ -22,7 +22,8 @@ honestApp.config(function($stateProvider, $urlRouterProvider){
 		})
 		.state('dashboard.devices', {
 			url: "/devices",
-			templateUrl: "views/dashboard/devices.html"
+			templateUrl: "views/dashboard/devices.html",
+			controller: 'devicesCtrl'
 		});
 		$urlRouterProvider.otherwise('dashboard/overview');
 })

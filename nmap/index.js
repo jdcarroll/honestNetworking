@@ -7,7 +7,6 @@ var db = require('mongojs')('honest',['devices']);
 var computer = function(computer){
 	new Promise(function(resolve, reject){
 			shell.exec("nmap -vv -A " + computer.ip + " -oX -", {silent:true}, function(code, stdout, stderr){
-			console.log("running Nmap on:", computer.ip);
 			parseString(stdout, function(error, result){
 				if (error){
 					console.log('ERROR:',error);
@@ -19,7 +18,6 @@ var computer = function(computer){
 				var hostname = [];
 				var device = {
 					cpe : [],
-					hostname : [],
 					port : []
 				}
 				try{
@@ -39,13 +37,16 @@ var computer = function(computer){
 								device.ostype = a.$.ostype;
 								
 							}
+							if (a.$.name == "domain"){
+								device.type = a.$.name
+							}
 							// UPnP Profile ---------------------------------
 
 							// Apple Mackbook Pro Profile ----------------------------------------------
 							if(a.$.name == 'afp'){
 								var test = a.$.extrainfo.split(';');
 								device.type = test;
-								device.osType = a.$.ostype;
+								device.ostype = a.$.ostype;
 							}
 							if(a.$.name == 'vnc'){
 								device.osType = a.$.ostype;
@@ -54,16 +55,22 @@ var computer = function(computer){
 								device.cpe.push(a.cpe);
 							}
 							if(a.$.hostname){
-								 device.hostname.push(a.$.hostname);
+								 device.hostname = a.$.hostname;
 							}
+							// Apple Mackbook Pro Profile ----------------------------------------------
+
+							// Apple TV Profile --------------------------------------------------------
 							if(a.$.extrainfo){
 								device.info = a.$.extrainfo;
 								if(device.info.includes('Apple TV')){
 									device.hostname = 'Apple TV'
 								}
 							}
-							// Apple Mackbook Pro Profile ----------------------------------------------
-							
+							if(a.$.name == 'rtsp'){
+								device.type = a.$.extrainfo;
+								device.ostype = a.$.ostype;
+							}
+							// Apple TV Profile --------------------------------------------------------
 						})
 					})
 					device.mac = computer.mac;

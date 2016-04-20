@@ -21,42 +21,21 @@ var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','
 var nmap = require('../nmap');
 var ping = require('../ping');
 
-devices = function(){
+var device = function(socket){
+	var subnet = global.honestServer.subnetRange.toString();
+	var search = subnet.replace(/,/g,'.');
+	var query = '{ip : {$regex: "^'+ search +'"}}';
 
-	_getDevices = new Promise(function(resolve, reject){
-
-	})
-
-	var ref_int = 0;
-	var devices = []
-	_addDevices = new Promise(function(resolve, reject){
-		var broadcast = arp
-		resolve(broadcast);
-	}).then(function(address){
-		ping(address.broadcast);
-	}).then(function(){
-		var devices = arp.then(function(val){
-			console.log(val.devices)
+	var get = new Promise(function(resolve, reject){
+		db.devices.find({ip : {$regex: '^'+ search }}, function(err, docs){
+			resolve(docs)
 		})
-		console.log(devices)
-	}).then(function(val){
-		console.log('DONE...');
+	}).then(function(value){
+		socket.emit('devices', value);
 	})
-
-	_updateDevics = new Promise(function(resolve, reject){
-
+	get.catch(function(err){
+		console.log(err);
 	})
+}
 
-	_deleteDevices = new Promise(function(resolve, reject){
-
-	})
-
-	return {
-		createDevices : _addDevices,
-		readDevices : _getDevices,
-		updateDevics : _updateDevics,
-		deleteDevices : _deleteDevices
-	}
-}();
-
-devices.createDevices
+module.exports = device
