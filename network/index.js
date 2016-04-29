@@ -43,9 +43,9 @@ module.exports = function(){
 					classC : [ localAddress[0], localAddress[1], localAddress[2] ]
 				}
 				global.honestServer = globalInterface 
-				console.log('running before');
+				
 				_packet.specifyClass();
-				console.log('running after');
+				
 				global.honestServer.subnetRange
 				ping(global.honestServer.subnetRange);
 				resolve(activeInterface);
@@ -62,12 +62,8 @@ module.exports = function(){
 				var subnet = global.honestServer.subnetRange.toString();
 				var address = global.honestServer.address;
 			
-				if (destIp != '10,2,0,23'){
-					console.log('destIp:',destIp)
-					console.log('sendIp:',sendIp)
-				}
 			} catch (err){
-				console.log(err);
+				
 			}
 		
 		},

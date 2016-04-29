@@ -24,6 +24,11 @@ honestApp.config(function($stateProvider, $urlRouterProvider){
 			url: "/devices",
 			templateUrl: "views/dashboard/devices.html",
 			controller: 'devicesCtrl'
+		})
+		.state('dashboard.server', {
+			url: "/server",
+			templateUrl: "views/dashboard/server.html",
+			controller: 'netStatCtrl'
 		});
 		$urlRouterProvider.otherwise('dashboard/overview');
 })
@@ -44,10 +49,10 @@ var socket = io()
 
 
 
-socket.on('bandwidth', function(bandwidth){
-	console.log('hello from appjs bandwidth')
-	// console.log(bandwidth)
-})
+// socket.on('bandwidth', function(bandwidth){
+// 	console.log('hello from appjs bandwidth')
+// 	// console.log(bandwidth)
+// })
 
 // socket.on('namp', function(report){
 // 	console.log(report);

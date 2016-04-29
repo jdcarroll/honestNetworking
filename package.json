@@ -25,6 +25,7 @@
     "libnmap": "^0.2.28",
     "mongojs": "^2.3.0",
     "mongojsom": "^0.1.21",
+    "netstat": "0.0.2",
     "node-libnmap": "^0.2.15",
     "node-nmap": "^3.0.1",
     "passport-local": "^1.0.0",

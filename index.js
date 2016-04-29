@@ -10,6 +10,7 @@ var io = require('socket.io')(server.listener);
 var nmap = require('libnmap');
 var users = require('./users');
 var devices = require('./devices');
+var netstat = require('./netstat');
 server.register([require('inert')], (err) => {
 	if (err){
 		throw err
@@ -27,6 +28,8 @@ io.on('connection', function (socket) {
 	socket.emit('connection', global.honestServer);
 
 	devices(socket);
+
+	netstat(socket);
 
 	var packetStream = network.packet.listen(socket);
 
