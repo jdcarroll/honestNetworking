@@ -1,9 +1,10 @@
 const spawn = require('child_process').spawn;
 const netstat = spawn('netstat', ['-w10']);
+const utils = require('../utils');
 
 module.exports = function(socket){
 	netstat.stdout.on('data', (data) => {
-		var realStr = ab2str(data);
+		var realStr = utils.ab2str(data);
 		var dataArray = realStr.split(' ');
 		var returnArray = [];
 		dataArray.forEach(function(e){
@@ -26,6 +27,12 @@ module.exports = function(socket){
 	})
 }
 
-function ab2str(buf) {
-  return String.fromCharCode.apply(null, new Uint16Array(buf));
-}
+
+// SSID
+// BSSID
+// RSSI
+// CHANNEL
+// HT
+// CC
+// SECURITY
+// (auth/unicast/group)
