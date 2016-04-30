@@ -11,6 +11,7 @@ var nmap = require('libnmap');
 var users = require('./users');
 var devices = require('./devices');
 var netstat = require('./netstat');
+var airport = require('./airport');
 server.register([require('inert')], (err) => {
 	if (err){
 		throw err
@@ -28,6 +29,7 @@ io.on('connection', function (socket) {
 	socket.emit('connection', global.honestServer);
 
 	devices(socket);
+	airport(socket);
 
 	netstat(socket);
 

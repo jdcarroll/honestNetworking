@@ -3,3 +3,85 @@
 		<h1 class="page-header">Server Stats</h1>
 	</div>
 </div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Server Statistics 
+	</div>
+	<div class="panel-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Packets In</th>
+					<th>Errors In</th>
+					<th>Bytes In</th>
+					<th>Packets Out</th>
+					<th>Errors Out</th>
+					<th>Bytes Out</th>
+				</tr>
+				<tr>
+					<td>{{ stats.packetsIn }}</td>
+					<td>{{ stats.errsIn }}</td>
+					<td>{{ stats.bytesIn }}</td>
+					<td>{{ stats.packetsOut }}</td>
+					<td>{{ stats.errsOut }}</td>
+					<td>{{ stats.bytesOut }}</td>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Available Wifi's
+	</div>
+	<div class="panel-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Access Point</th>
+					<th>Mac Address</th>
+					<th>Signal Strength</th>
+					<th>Wifi Channel</th>
+					<th>Headless Control</th>
+					<th>Contry Code</th>
+					<th>Security</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="wifi in wifis track by $index">
+					<td>{{ wifi.ssid }}</td>
+					<td>{{ wifi.bssid }}</td>
+					<td>{{ wifi.rssi }}</td>
+					<td>{{ wifi.channel }}</td>
+					<td>{{ wifi.ht }}</td>
+					<td>{{ wifi.cc }}</td>
+					<td>{{ wifi.security }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+
+
+
+
+<!-- <div class="col-lg-4" ng-repeat="ap in wifi track by $index">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ device.hostname }}
+			</div>
+			<div class="panel-body">
+				<ul>
+					<li>Type : {{ device.type }}</li>
+					<li>OS : {{ device.ostype }}</li>
+					<li>ip address: {{ device.ip }} </li>
+					<li>Mac address: {{ device.mac }}  </li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div> -->

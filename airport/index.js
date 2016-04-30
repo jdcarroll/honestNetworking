@@ -3,48 +3,68 @@ const airport = spawn('airport', ['-s']);
 const utils = require('../utils');
 
 module.exports = function(socket){
-	airport.stdout.on('data', (data) => {
-		var str = utils.ab2str(data);
-		var dataArray = [];
-		var returnArray = [];
-		var returnObj = {};
-		var splitStr = str.split(' ');
-		splitStr.forEach((e) => {
-			if(e != ''){
-				dataArray.push(e)
-			}
-		})
-		var strData = dataArray.toString();
-		var prep = strData.split('\n')
+	console.log('airport running:');
+	var returnArray = [];
+	var promise = new Promise((resolve, reject) => {
+		airport.stdout.on('data', (data) => {
+			var str = utils.ab2str(data);
+			var dataArray = [];
+			console.log('airport.stdout running:');
+			var splitStr = str.split(' ');
+			splitStr.forEach((e) => {
+				if(e != ''){
+					dataArray.push(e)
+				}
+			})
+			var strData = dataArray.toString();
+			var prep = strData.split('\n')
 			prep.forEach((e) => {
 				var item = e.split(',');
-				returnArray.push(item);
-			})
-		returnArray.forEach((e) => {
-			console.log('length:',e.length);
-			for(var i = 0; i < e.length; i++){
+				if(item[0] == ''){
+					console.log('running');
+					item.splice(0, 1)
+				}
+				if(item[item.length - 1] == ''){
+					item.splice(item.length -1, 1)
+				}
+				if(item[6] == '--'){
+					item.splice(6,1);
+				}
 
-				if(e[i] == ''){
-					delete e[i];
+				if(item[0] == 'BHNDG1670A7EF2-5G'){
+					console.log('item:',item)
 				}
 				
+				if (item[0] != 'SSID' || item[0] != undefined){
+					var returnObj = {
+						ssid: item[0],
+						bssid: item[1],
+						rssi: item[2],
+						channel: item[3],
+						ht: item[4],
+						cc: item[5],
+						security : item[6]
+					}
+					if(item.length > 8){
+						for(var i = 7; i > item.length; i++){
+							returnObj.security += item[i];
+						}
+						 1
+					}
+				}
 
-			}
-		})
-		console.log(returnArray);
+				// console.log('item:',returnObj);
+				if(returnObj){returnArray.push(returnObj);}
 
-		// var str = utils.ab2str(data);
-		// var dataArray = str.split('\n');
-		// 'SSID,BSSID,RSSI,CHANNEL,HT,CC,SECURITY,(auth/unicast/group)',
-		// var returnArray = [];
-		// var baseArray = [];
-		// var data = [];
-		// dataObj = {}
-		// dataArray.splice(0,1);
-		// dataArray.forEach((e) => {
-		// 	if(e == ''){
-		// 		dataArray.splice(dataArray.indexOf(e), 1);
-		// 	}
+			})
+
+			console.log(returnArray);		
+			resolve(returnArray)
 		})
-}();
+	}).then((values) => {
+		console.log('airport.stdout.socket running:')
+		socket.emit('wifi', values);
+	})
+	
+}
 
