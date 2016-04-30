@@ -1,0 +1,25 @@
+body{
+	background-color: #7F1624;
+}
+
+.panel-default > .panel-heading {
+	background-color: #7F1624;
+	color: #E9E5D9;
+}
+
+.navbar-default {
+	background-color: #7F1624;
+	
+}
+
+.navbar-default .navbar-brand {
+	color: #E9E5D9;
+}
+
+a {
+	color: #E9E5D9;
+}
+
+#page-wrapper {
+	background-image: url('../assets/whiteTyle.png')
+}
