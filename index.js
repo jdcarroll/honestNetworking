@@ -29,16 +29,16 @@ server.register([require('inert')], (err) => {
 
 })
 
-// server.register({
-//     register: require('good'),
-//     options: options
-// }, (err) => {
+server.register({
+    register: require('good'),
+    options: options
+}, (err) => {
 
-//     if (err) {
-//         console.error(err);
-//     }
+    if (err) {
+        console.error(err);
+    }
 
-// });
+});
 io.on('connection', function (socket) {
 	socket.emit('connection', global.honestServer);
 
