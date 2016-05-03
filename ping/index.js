@@ -2,20 +2,21 @@
 
 var shell = require('shelljs');
 
-var ping = function(broadcast){
-	if(broadcast.length == 3){
+var ping = function(interface){
+	if(interface.subnetRange.length == 3){
 		var octet = '.255'
 	}
-	if(broadcast.length == 2){
+	if(interface.subnetRange.length == 2){
 		var octet = '.255.255'
 	}
-	if(broadcast.length == 1){
+	if(interface.subnetRange.length == 1){
 		var octet = '255.255.255'
 	}
-	var prep = broadcast.toString();
+	var prep = interface.subnetRange.toString();
 	broadcast = prep.replace(/,/g,'.');
+	interface.broadcast = broadcast + octet;
 	shell.exec("ping " + broadcast + octet ,{ silent: true, timeout: 3000 });
-	var arp = require('../arp');
+	var arp = require('../arp')(interface);
 }
 
 module.exports = ping;
