@@ -1,4 +1,5 @@
 var network = require('../network');
+var airport = require('../airport');
 module.exports = function(){
 
 	_publicDir = {
@@ -8,6 +9,15 @@ module.exports = function(){
 			directory: {
 				path: 'public'
 			}
+		}
+	}
+
+	_server = {
+		method : 'GET',
+		path : '/dashboard/server',
+		handler: function(req, res){
+			var wifi = airport;
+			res(wifi);
 		}
 	}
 
@@ -59,6 +69,7 @@ module.exports = function(){
 		public : _publicDir,
 		bower : _bower,
 		loginpost: _loginpost,
-		addUser: _addUser
+		addUser: _addUser,
+		server : _server
 	}
 }()

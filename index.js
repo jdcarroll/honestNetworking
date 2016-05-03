@@ -4,7 +4,7 @@ var network = require('./network');
 var pcap = require('pcap2');
 var inert = require('inert');
 var server = new Hapi.Server();
-server.connection({ port: 4000 });
+	server.connection({ port: 4000 });
 var Test = require('./speedtest');
 var io = require('socket.io')(server.listener);
 var nmap = require('libnmap');
@@ -12,6 +12,9 @@ var users = require('./users');
 var devices = require('./devices');
 var netstat = require('./netstat');
 var airport = require('./airport');
+var options = require('./options');
+const Good = require('good');
+var interface = network.server;
 server.register([require('inert')], (err) => {
 	if (err){
 		throw err
@@ -20,33 +23,36 @@ server.register([require('inert')], (err) => {
 			routes.public,
 			routes.bower,
 			routes.loginpost,
-			routes.addUser
+			routes.addUser,
+			routes.server
 		])
 
 })
 
+// server.register({
+//     register: require('good'),
+//     options: options
+// }, (err) => {
+
+//     if (err) {
+//         console.error(err);
+//     }
+
+// });
 io.on('connection', function (socket) {
 	socket.emit('connection', global.honestServer);
 
-	devices(socket);
-	airport(socket);
-
+	// devices(socket, interface);
 	netstat(socket);
 
 	var packetStream = network.packet.listen(socket);
 
 	setInterval(function(){
-		Test(socket)
+		Test(socket);
 	}, 10000)
 
 });
-
-
-
 server.start(function () {
-		network.server;
+		
 		console.log('Server is running at:', server.info.uri)
     });
-
-// query: { EIO: '3', transport: 'polling', t: 'LGS22jw' } } }
-//  query: { EIO: '3', transport: 'polling', t: 'LGS22jv' } } }

@@ -1,11 +1,13 @@
-honestApp.controller('netStatCtrl', function($scope, socket){
+honestApp.controller('netStatCtrl', function($scope, $http, socket){
+
+	$http.get('/dashboard/server').then(function(response) {
+        $scope.wifis = response.data;
+    });
+
 	socket.on('netstat', function(data){
-		console.log(data);
 		$scope.stats = data;
 	})
-	$scope.wifi = []
-	socket.on('wifi', (data) => {
-		console.log('data:', data)
-		$scope.wifis = data;
-	})
+	// socket.on('wifi', function(data){
+	// 	$scope.wifis = data;
+	// })
 })

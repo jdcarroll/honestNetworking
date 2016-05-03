@@ -1,15 +1,14 @@
+//Airport.js
 const spawn = require('child_process').spawn;
 const airport = spawn('airport', ['-s']);
 const utils = require('../utils');
+const process = require('process');
 
-module.exports = function(socket){
-	console.log('airport running:');
-	var returnArray = [];
-	var promise = new Promise((resolve, reject) => {
+module.exports = promise = new Promise((resolve, reject) => {
+		var returnArray = [];
 		airport.stdout.on('data', (data) => {
 			var str = utils.ab2str(data);
 			var dataArray = [];
-			console.log('airport.stdout running:');
 			var splitStr = str.split(' ');
 			splitStr.forEach((e) => {
 				if(e != ''){
@@ -21,7 +20,6 @@ module.exports = function(socket){
 			prep.forEach((e) => {
 				var item = e.split(',');
 				if(item[0] == ''){
-					console.log('running');
 					item.splice(0, 1)
 				}
 				if(item[item.length - 1] == ''){
@@ -29,10 +27,6 @@ module.exports = function(socket){
 				}
 				if(item[6] == '--'){
 					item.splice(6,1);
-				}
-
-				if(item[0] == 'BHNDG1670A7EF2-5G'){
-					console.log('item:',item)
 				}
 				
 				if (item[0] != 'SSID' || item[0] != undefined){
@@ -52,19 +46,11 @@ module.exports = function(socket){
 						 1
 					}
 				}
-
-				// console.log('item:',returnObj);
 				if(returnObj){returnArray.push(returnObj);}
-
 			})
-
-			console.log(returnArray);		
 			resolve(returnArray)
 		})
-	}).then((values) => {
-		console.log('airport.stdout.socket running:')
-		socket.emit('wifi', values);
-	})
-	
-}
+	 })//.then((values) => {
+	// 	// socket.emit('wifi', values);
+	// })
 
