@@ -25,7 +25,7 @@ var computer = function(computer){
 						e.service.forEach(function(a){
 							device.port.push(a.$);
 							// iPhone Profile ---------------------------------
-							//console.log(a.$);
+							// console.log(a.$);
 							// iPhone Profile ---------------------------------
 
 							// UPnP Profile ---------------------------------
@@ -82,9 +82,6 @@ var computer = function(computer){
 			})
 		 });
 	}).then(function(val){
-		console.log( val.ip + ' Device---------------------------------------------------------')
-		console.log(val);
-		console.log('--------------------------------------------------------------------------')
 		db.devices.insert(val, function(err, docs){
 			if(err) {throw err}
 		});

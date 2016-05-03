@@ -7,49 +7,45 @@ var ipaddr = require('ipaddr.js');
 var ping = require('../ping');
 
 module.exports = function(){
-
+	
 // Define The Server network Schema for the local network
 	_server = new Promise(function(resolve, reject){
+		var interfaces = os.networkInterfaces();
+		resolve(interfaces);
+	}).then(function(val){
 
-				var interfaces = os.networkInterfaces();
-				resolve(interfaces);
-			}).then(function(val){
+		var activeInterface = '';
+		var change = 0;
+		var array = [];
+		val.en0.forEach(function(e){
+				if(e.family == 'IPv4'){
+				activeInterface = e;
+			}
+		})
+		var change = 0;
+		var localAddress = [];
+		var la = activeInterface.address.split('.');
+		la.forEach(function(e){
+			change = Number(e);
+			localAddress.push(change);
+		})
+		activeInterface.address = localAddress
+		returnValue = val;
+		var globalInterface = {
+			address : localAddress,
+			netmask : activeInterface.netmask,
+			family : activeInterface.family,
+			mac : activeInterface.mac,
+			internal : activeInterface.internal,
+			classA : [ localAddress[0] ],
+			classB : [ localAddress[0], localAddress[1] ],
+			classC : [ localAddress[0], localAddress[1], localAddress[2] ]
+		}
+		_packet.specifyClass(globalInterface);
+	})
 
-				var activeInterface = ''
-				var change = 0;
-				var array = []
-				val.en0.forEach(function(e){
-						if(e.family == 'IPv4'){
-						activeInterface = e;
-					}
-				})
-				var change = 0;
-				var localAddress = [];
-				var la = activeInterface.address.split('.')
-				la.forEach(function(e){
-					change = Number(e);
-					localAddress.push(change);
-				})
-				activeInterface.address = localAddress
-				returnValue = val;
-				var globalInterface = {
-					address : localAddress,
-					netmask : activeInterface.netmask,
-					family : activeInterface.family,
-					mac : activeInterface.mac,
-					internal : activeInterface.internal,
-					classA : [ localAddress[0] ],
-					classB : [ localAddress[0], localAddress[1] ],
-					classC : [ localAddress[0], localAddress[1], localAddress[2] ]
-				}
-				global.honestServer = globalInterface 
-				
-				_packet.specifyClass();
-				
-				global.honestServer.subnetRange
-				ping(global.honestServer.subnetRange);
-				resolve(activeInterface);
-			}) 
+		
+	
 	_devices = {
 
 	}
@@ -67,28 +63,33 @@ module.exports = function(){
 			}
 		
 		},
-		specifyClass : function(){
-			console.log(global.honestServer.netmask);
-			var range = ipaddr.IPv4.parse(global.honestServer.netmask).prefixLengthFromSubnetMask();
-			console.log(range);
+		specifyClass : function(gInterface){
+			var range = ipaddr.IPv4.parse(gInterface.netmask).prefixLengthFromSubnetMask();
 			if(range <= 8){
-				delete global.honestServer.classC;
-				delete global.honestServer.classB;
-				global.honestServer.subnetRange = global.honestServer.classA
-				delete global.honestServer.classA;
+				delete gInterface.classC;
+				delete gInterface.classB;
+				gInterface.subnetRange = gInterface.classA;
+				delete gInterface.classA;
+				ping(gInterface);
+				return gInterface
 			}
 			if(range > 8 && range <= 23){
-				delete global.honestServer.classA;
-				delete global.honestServer.classC;
-				global.honestServer.subnetRange = global.honestServer.classB
-				delete global.honestServer.classB;
+				delete gInterface.classA;
+				delete gInterface.classC;
+				gInterface.subnetRange = gInterface.classB;
+				delete gInterface.classB;
+				ping(gInterface);
+				return gInterface
 			}
 			if(range >= 24 ){
-				delete global.honestServer.classA;
-				delete global.honestServer.classB;
-				global.honestServer.subnetRange = global.honestServer.classC
-				delete global.honestServer.classC;
+				delete gInterface.classA;
+				delete gInterface.classB;
+				gInterface.subnetRange = gInterface.classC;
+				delete gInterface.classC;
+				ping(gInterface);
+				return gInterface
 			}
+
 		},
 		chunk : [],
 		nMap : function(ip){
@@ -191,12 +192,7 @@ module.exports = function(){
 			}
 		})
 		ipObj.catch(function(reason){
-			console.log('===============================')
-			console.log('ipDest')
-			console.log('-------------------------------')
-			console.log(packet);
-			console.log(reason);
-			console.log('===============================')
+			console.log('reasaon:', reason);
 		})	
 		
 	},
