@@ -86,4 +86,4 @@ module.exports = (function(server_interface){
 		devices: _devices,
 		server : _server
 	}
-})();
+}());
