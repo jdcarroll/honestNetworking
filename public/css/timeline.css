@@ -48,6 +48,7 @@
     border: 1px solid #d4d4d4;
     border-radius: 2px;
     -webkit-box-shadow: 0 1px 6px rgba(0,0,0,0.175);
+    -moz-box-shadow:0 1px 6px rgba(0,0,0,0.175);
     box-shadow: 0 1px 6px rgba(0,0,0,0.175);
 }
 
@@ -110,23 +111,23 @@
 }
 
 .timeline-badge.primary {
-    background-color: #2e6da4 !important;
+    background-color: #2e6da4;
 }
 
 .timeline-badge.success {
-    background-color: #3f903f !important;
+    background-color: #3f903f;
 }
 
 .timeline-badge.warning {
-    background-color: #f0ad4e !important;
+    background-color: #f0ad4e;
 }
 
 .timeline-badge.danger {
-    background-color: #d9534f !important;
+    background-color: #d9534f;
 }
 
 .timeline-badge.info {
-    background-color: #5bc0de !important;
+    background-color: #5bc0de;
 }
 
 .timeline-title {
