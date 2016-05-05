@@ -1,6 +1,6 @@
 var db = require('mongojsom')('honest',['speedTest'])
+var speedTest = require('speedtest-net');
 var Test = function(socket){
-	var speedTest = require('speedtest-net');
 	var _test = speedTest({maxTime: 5000});
 	_test.on('data', function(data) {
 		socket.emit('speed_test', data);
