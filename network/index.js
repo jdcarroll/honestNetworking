@@ -181,7 +181,7 @@ module.exports = function(){
 		
 	},
 	_packet.subnet = function(packet){
-		var interface = global.honestServer
+		var server_interface = global.honestServer
 		var range = ipaddr.IPv4.parse(interface.netmask).prefixLengthFromSubnetMask();
 		if (packet) {
 			if (range <= 8){
@@ -198,7 +198,7 @@ module.exports = function(){
 			}
 			if (range > 16){
 				var IPmatch = interface.subnetRange
-				if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1]) && (packet.destIp[2] == IPmatch[2])){
+				if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1]) && (packet.destIp[2] === IPmatch[2])){
 					var ipDestString = packet.destIp.toString()
 					_packet.nMap_collectIp(ipDestString)
 				}
