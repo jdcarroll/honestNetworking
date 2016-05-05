@@ -4,32 +4,32 @@ const airport = spawn('airport', ['-s']);
 const utils = require('../utils');
 const process = require('process');
 
-module.exports = promise = new Promise((resolve, reject) => {
+module.exports = new Promise((resolve, reject) => {
 		var returnArray = [];
 		airport.stdout.on('data', (data) => {
 			var str = utils.ab2str(data);
 			var dataArray = [];
 			var splitStr = str.split(' ');
 			splitStr.forEach((e) => {
-				if(e != ''){
+				if(e !== ''){
 					dataArray.push(e)
 				}
 			})
 			var strData = dataArray.toString();
-			var prep = strData.split('\n')
-			prep.forEach((e) => {
-				var item = e.split(',');
-				if(item[0] == ''){
+			var prepDataForArray = strData.split('\n')
+			prepDataForArray.forEach((wifiString) => {
+				var item = wifiString.split(',');
+				if(item[0] === ''){
 					item.splice(0, 1)
 				}
-				if(item[item.length - 1] == ''){
+				if(item[item.length - 1] === ''){
 					item.splice(item.length -1, 1)
 				}
-				if(item[6] == '--'){
+				if(item[6] === '--'){
 					item.splice(6,1);
 				}
 				
-				if (item[0] != 'SSID' || item[0] != undefined){
+				if (item[0] !== 'SSID' || item[0] !== undefined){
 					var returnObj = {
 						ssid: item[0],
 						bssid: item[1],

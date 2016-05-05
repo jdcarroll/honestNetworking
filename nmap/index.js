@@ -29,7 +29,7 @@ var computer = function(computer){
 							// iPhone Profile ---------------------------------
 
 							// UPnP Profile ---------------------------------
-							if(a.$.name == 'upnp'){
+							if(a.$.name === 'upnp'){
 								device.hostname = a.$.product;
 								device.cpe.push(a.$.cpe);
 								device.info = a.$.extrainfo;
@@ -37,18 +37,18 @@ var computer = function(computer){
 								device.ostype = a.$.ostype;
 								
 							}
-							if (a.$.name == "domain"){
+							if (a.$.name === "domain"){
 								device.type = a.$.name
 							}
 							// UPnP Profile ---------------------------------
 
 							// Apple Mackbook Pro Profile ----------------------------------------------
-							if(a.$.name == 'afp'){
+							if(a.$.name === 'afp'){
 								var test = a.$.extrainfo.split(';');
 								device.type = test;
 								device.ostype = a.$.ostype;
 							}
-							if(a.$.name == 'vnc'){
+							if(a.$.name === 'vnc'){
 								device.osType = a.$.ostype;
 							}
 							if(a.cpe){
@@ -66,7 +66,7 @@ var computer = function(computer){
 									device.hostname = 'Apple TV'
 								}
 							}
-							if(a.$.name == 'rtsp'){
+							if(a.$.name === 'rtsp'){
 								device.type = a.$.extrainfo;
 								device.ostype = a.$.ostype;
 							}
