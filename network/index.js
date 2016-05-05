@@ -12,43 +12,56 @@ module.exports = function(){
 	_server = new Promise(function(resolve, reject){
 		var interfaces = os.networkInterfaces();
 		resolve(interfaces);
-	}).then(function(val){
+	}).then(function(os_interfaces){
 
 		var activeInterface = '';
 		var change = 0;
 		var array = [];
-		val.en0.forEach(function(e){
-				if(e.family == 'IPv4'){
-				activeInterface = e;
+		os_interfaces.en0.forEach(function(detected_interface){
+				if(detected_interface.family == 'IPv4'){
+				activeInterface = detected_interface;
 			}
 		})
 		var change = 0;
 		var localAddress = [];
-		var la = activeInterface.address.split('.');
-		la.forEach(function(e){
-			change = Number(e);
+		var localAddressLoop = activeInterface.address.split('.');
+		localAddressLoop.forEach(function(octet){
+			change = Number(octet);
 			localAddress.push(change);
 		})
 		activeInterface.address = localAddress
-		returnValue = val;
+		returnValue = os_interfaces;
 		var globalInterface = {
 			address : localAddress,
 			netmask : activeInterface.netmask,
 			family : activeInterface.family,
 			mac : activeInterface.mac,
-			internal : activeInterface.internal,
-			classA : [ localAddress[0] ],
-			classB : [ localAddress[0], localAddress[1] ],
-			classC : [ localAddress[0], localAddress[1], localAddress[2] ]
+			internal : activeInterface.internal
 		}
-		_packet.specifyClass(globalInterface);
+		var range = ipaddr.IPv4.parse(globalInterface.netmask).prefixLengthFromSubnetMask();
+			if(range <= 8){
+				globalInterface.subnetRange = [
+					globalInterface.address[0]
+				]
+
+			}
+			if(range > 8 && range <= 23){
+				globalInterface.subnetRange = [
+					globalInterface.address[0],
+					globalInterface.address[1]
+				]
+			}
+			if(range >= 24 ){
+				globalInterface.subnetRange = [
+					globalInterface.address[0],
+					globalInterface.address[1],
+					globalInterface.address[2]
+				];
+
+			}
+		return globalInterface;
+
 	})
-
-		
-	
-	_devices = {
-
-	}
 // define the packet object that sniffs the network for all activity accross the network
 	_packet = {
 		ipDeviceDetection : function(packet){
@@ -62,34 +75,6 @@ module.exports = function(){
 				
 			}
 		
-		},
-		specifyClass : function(gInterface){
-			var range = ipaddr.IPv4.parse(gInterface.netmask).prefixLengthFromSubnetMask();
-			if(range <= 8){
-				delete gInterface.classC;
-				delete gInterface.classB;
-				gInterface.subnetRange = gInterface.classA;
-				delete gInterface.classA;
-				ping(gInterface);
-				return gInterface
-			}
-			if(range > 8 && range <= 23){
-				delete gInterface.classA;
-				delete gInterface.classC;
-				gInterface.subnetRange = gInterface.classB;
-				delete gInterface.classB;
-				ping(gInterface);
-				return gInterface
-			}
-			if(range >= 24 ){
-				delete gInterface.classA;
-				delete gInterface.classB;
-				gInterface.subnetRange = gInterface.classC;
-				delete gInterface.classC;
-				ping(gInterface);
-				return gInterface
-			}
-
 		},
 		chunk : [],
 		nMap : function(ip){
@@ -151,9 +136,8 @@ module.exports = function(){
 		total : 0,
 		packet_average : 0,
 		set_int : function(data){
-			if(data == 0){
-				/* Do Nothing */
-			}else{
+			if(data == 0){/* Do Nothing */}
+			else{
 				_packet.total += data;
 				_packet.count ++;
 			}
@@ -244,11 +228,15 @@ module.exports = function(){
 		}, 3000);
 		try{
 			_packet.pcapSession.on('packet', function(raw_packet){
-
-				var packets = pcap.decode.packet(raw_packet);
-				var bandwidth = _packet.bandwidth.total(packets);
-				var ip = _packet.IpAddr(packets);
-				var dd = _packet.ipDeviceDetection(packets);
+				try{
+					var packets = pcap.decode.packet(raw_packet);
+					var bandwidth = _packet.bandwidth.total(packets);
+					var ip = _packet.IpAddr(packets);
+					var dd = _packet.ipDeviceDetection(packets);
+				}catch(err){
+				}
+				
+				
 			})
 		}catch(err){
 			console.log(err);
