@@ -11,7 +11,7 @@ honestApp.controller('loginCtrl', function($scope, loginService, $location){
 				// console.log('fail');
 			})
 
-			if(cookie != { status : 404 }){
+			if(cookie !== { status : 404 }){
 				$location.path('/dashboard')
 			}else{
 				// console.log('fail');
