@@ -4,7 +4,7 @@ var shell = require('shelljs');
 var db = require('mongojs')('honest',['devices']);
 var nmap = require('../nmap');
 var utils = require('../utils');
-var arp = function(interface){
+var arp = function(server_interface){
 	var arpResults = new Promise(function(resolve, reject){
 		var returnData = {};
 		shell.exec("arp -a", {silent:true}, function(code, stdout, stderr){ 
@@ -22,7 +22,7 @@ var arp = function(interface){
 					mac : item[3],
 					iterface : item[5]
 				}
-				if(cut2.includes(interface.broadcast)){
+				if(cut2.includes(server_interface.broadcast)){
 					returnData.broadcast = data.ip;
 				}else if (data.mac != '(incomplete)'){
 					result.push(data);
