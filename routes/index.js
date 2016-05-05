@@ -1,6 +1,7 @@
 var network = require('../network');
 var airport = require('../airport');
-module.exports = function(){
+var devices = require('../devices');
+module.exports = (function(server_interface){
 
 	_publicDir = {
 		method: 'GET',
@@ -26,6 +27,18 @@ module.exports = function(){
 		path: '/dashboard',
 		handler: function(req, res){
 			res(network.server.activeInterface())
+		}
+	}
+
+	_devices = {
+		method: 'GET',
+		path: '/dashboard/devices',
+		handler: function(req, res){
+			console.log('------------------------------');
+			console.log('/dashboard/devices------------');
+			var deviceArray = devices;
+			// console.log('device:', deviceArray);
+			res(deviceArray);
 		}
 	}
 
@@ -56,7 +69,7 @@ module.exports = function(){
 				password : req.payload.password
 			}
 			
-			if (user.username == 'Jeff' && user.password == 'Jeff'){
+			if (user.username === 'admin' && user.password === 'password'){
 				var hash = 'dfgjfghnytfguhdfdfgndfgjdfgjsdfjhsrtuserakadfh';
 				res(hash);
 			}else {
@@ -70,6 +83,7 @@ module.exports = function(){
 		bower : _bower,
 		loginpost: _loginpost,
 		addUser: _addUser,
+		devices: _devices,
 		server : _server
 	}
-}()
+})();
