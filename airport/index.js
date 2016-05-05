@@ -1,4 +1,3 @@
-//Airport.js
 const spawn = require('child_process').spawn;
 const airport = spawn('airport', ['-s']);
 const utils = require('../utils');
@@ -16,7 +15,7 @@ module.exports = new Promise((resolve, reject) => {
 				}
 			})
 			var strData = dataArray.toString();
-			var prepDataForArray = strData.split('\n')
+			var prepDataForArray = strData.split('\n');
 			prepDataForArray.forEach((wifiString) => {
 				var item = wifiString.split(',');
 				if(item[0] === ''){
@@ -47,10 +46,10 @@ module.exports = new Promise((resolve, reject) => {
 					}
 				}
 				if(returnObj){returnArray.push(returnObj);}
-			})
-			resolve(returnArray)
-		})
-	 })//.then((values) => {
+			});
+			resolve(returnArray);
+		});
+	 });//.then((values) => {
 	// 	// socket.emit('wifi', values);
 	// })
 
