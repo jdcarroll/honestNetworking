@@ -1,22 +1,23 @@
 // ping.js
 
 var shell = require('shelljs');
-
+var arp = require('../arp');
 var ping = function(server_interface){
-	if(server_interface.subnetRange.length == 3){
-		var octet = '.255'
+	var octet
+	if(server_interface.subnetRange.length === 3){
+		octet = '.255';
 	}
-	if(server_interface.subnetRange.length == 2){
-		var octet = '.255.255'
+	if(server_interface.subnetRange.length === 2){
+		octet = '.255.255';
 	}
-	if(server_interface.subnetRange.length == 1){
-		var octet = '255.255.255'
+	if(server_interface.subnetRange.length === 1){
+		octet = '255.255.255';
 	}
 	var prep = server_interface.subnetRange.toString();
 	broadcast = prep.replace(/,/g,'.');
 	server_interface.broadcast = broadcast + octet;
 	shell.exec("ping " + broadcast + octet ,{ silent: true, timeout: 3000 });
-	var arp = require('../arp')(server_interface);
+	arp(server_interface);
 }
 
 module.exports = ping;
