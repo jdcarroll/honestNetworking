@@ -42,7 +42,6 @@ module.exports = new Promise((resolve, reject) => {
 						for(var i = 7; i > item.length; i++){
 							returnObj.security += item[i];
 						}
-						 1
 					}
 				}
 				if(returnObj){returnArray.push(returnObj);}
