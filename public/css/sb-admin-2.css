@@ -116,7 +116,7 @@ body {
 
 .sidebar .nav-second-level li,
 .sidebar .nav-third-level li {
-    border-bottom: 0!important;
+    border-bottom: 0;
 }
 
 .sidebar .nav-second-level li a {
@@ -187,11 +187,11 @@ body {
     border-bottom: 1px dotted #999;
 }
 
-.chat li.left .chat-body {
+.chat .left .chat-body {
     margin-left: 60px;
 }
 
-.chat li.right .chat-body {
+.chat .right .chat-body {
     margin-right: 60px;
 }
 
@@ -252,7 +252,7 @@ table.dataTable thead .sorting:after {
     content: "\f0dc";
     float: right;
     font-family: fontawesome;
-    color: rgba(50,50,50,.5);
+    color: rgb(50,50,50);
 }
 
 .btn-circle {
@@ -283,11 +283,11 @@ table.dataTable thead .sorting:after {
     line-height: 1.33;
 }
 
-.show-grid [class^=col-] {
+.show-grid {
     padding-top: 10px;
     padding-bottom: 10px;
     border: 1px solid #ddd;
-    background-color: #eee!important;
+    background-color: #eee;
 }
 
 .show-grid {
