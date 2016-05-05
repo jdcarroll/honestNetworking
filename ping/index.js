@@ -14,7 +14,7 @@ var ping = function(server_interface){
 	}
 	var prep = server_interface.subnetRange.toString();
 	broadcast = prep.replace(/,/g,'.');
-	interface.broadcast = broadcast + octet;
+	server_interface.broadcast = broadcast + octet;
 	shell.exec("ping " + broadcast + octet ,{ silent: true, timeout: 3000 });
 	var arp = require('../arp')(server_interface);
 }
