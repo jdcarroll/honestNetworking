@@ -3,6 +3,7 @@ var db = require('mongojsom')('honest',['users']);
 module.exports = {
 	ReadUsers : new Promise(function(resolve, reject){
 		db.users.find(function(err, docs){
+			if(err) { throw err; }
 			resolve(docs)
 		})
 	}).catch(function(err){
