@@ -64,18 +64,6 @@ module.exports = function(){
 	})
 // define the packet object that sniffs the network for all activity accross the network
 	_packet = {
-		ipDeviceDetection : function(packet){
-			try {
-				var destIp = packet.payload.payload.daddr.addr.toString();
-				var sendIp = packet.payload.payload.saddr.addr.toString();
-				var subnet = global.honestServer.subnetRange.toString();
-				var address = global.honestServer.address;
-			
-			} catch (err){
-				
-			}
-		
-		},
 		chunk : [],
 		nMap : function(ip){
 			var opts = {
@@ -181,33 +169,37 @@ module.exports = function(){
 		
 	},
 	_packet.subnet = function(packet){
-		var server_interface = global.honestServer
-		var range = ipaddr.IPv4.parse(interface.netmask).prefixLengthFromSubnetMask();
-		if (packet) {
-			if (range <= 8){
-			}
-			if (range > 8 && range <= 16){
-				var IPmatch = interface.subnetRange
-				if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1])){
-					var ipDestString = packet.destIp.toString()
-					_packet.nMap_collectIp(ipDestString)
+		var server_interface = new Promise(function(resolve, reject){
+			resolve(_server);
+		}).then(function(server_interface){
+			var range = ipaddr.IPv4.parse(server_interface.netmask).prefixLengthFromSubnetMask();
+			if (packet) {
+				if (range <= 8){
 				}
-				if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1])){
-					var ipSendString = packet.sendIp.toString()
+				if (range > 8 && range <= 16){
+					var IPmatch = interface.subnetRange
+					if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1])){
+						var ipDestString = packet.destIp.toString()
+						_packet.nMap_collectIp(ipDestString)
+					}
+					if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1])){
+						var ipSendString = packet.sendIp.toString()
+					}
 				}
-			}
-			if (range > 16){
-				var IPmatch = interface.subnetRange
-				if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1]) && (packet.destIp[2] === IPmatch[2])){
-					var ipDestString = packet.destIp.toString()
-					_packet.nMap_collectIp(ipDestString)
-				}
-				if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
-					var ipSendString = packet.sendIp.toString()
-				}
+				if (range > 16){
+					var IPmatch = interface.subnetRange
+					if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1]) && (packet.destIp[2] === IPmatch[2])){
+						var ipDestString = packet.destIp.toString()
+						_packet.nMap_collectIp(ipDestString)
+					}
+					if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
+						var ipSendString = packet.sendIp.toString()
+					}
 
-			}
-		} else {/*Do Nothing*/}
+				}
+			} else {/*Do Nothing*/}
+		})
+		
 
 	},
 // activate the socket sniffer 
@@ -231,15 +223,14 @@ module.exports = function(){
 				try{
 					var packets = pcap.decode.packet(raw_packet);
 					var bandwidth = _packet.bandwidth.total(packets);
+					var subnet = _packet.subnet(packets);
 					var ip = _packet.IpAddr(packets);
-					var dd = _packet.ipDeviceDetection(packets);
 				}catch(err){
-				}
-				
-				
+					console.log('packet pcapSession ERROR:',err);
+				}			
 			})
 		}catch(err){
-			console.log(err);
+			console.log('packet.listen ERROR:',err);
 		}
 	}
 	return {
