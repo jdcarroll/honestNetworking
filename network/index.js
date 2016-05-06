@@ -9,7 +9,7 @@ var ping = require('../ping');
 module.exports = (function(){
 	
 // Define The Server network Schema for the local network
-	_server = new Promise(function(resolve, reject){
+	var _server = new Promise(function(resolve, reject){
 		var interfaces = os.networkInterfaces();
 		resolve(interfaces);
 	}).then(function(os_interfaces){
@@ -62,7 +62,7 @@ module.exports = (function(){
 
 	}),
 // define the packet object that sniffs the network for all activity accross the network
-	_packet = {
+	var _packet = {
 		chunk : [],
 		nMap : function(ip){
 			var opts = {
@@ -76,15 +76,15 @@ module.exports = (function(){
 			}
 			if(_packet.nMap_preStore.length > 0){
 				 _packet.nMap_preStore.forEach(function(e){
-					if(ip == e){
-						/* Do Nothing */
-					}else {
+					if(ip !== e){
 						if(_packet.nMap_preStore.length === 10){
 							/* Do Nothing */
 						}else{
 							_packet.nMap_preStore.push(e);
 							_packet.nMap(e);
 						}
+					}else {
+						/* Do Nothing */
 					}
 				})
 			}
@@ -123,7 +123,7 @@ module.exports = (function(){
 		total : 0,
 		packet_average : 0,
 		set_int : function(data){
-			if(data == 0){/* Do Nothing */}
+			if(data === 0){/* Do Nothing */}
 			else{
 				_packet.total += data;
 				_packet.count ++;
@@ -181,6 +181,13 @@ module.exports = (function(){
 				var ipSendString = '';
 				var IPmatch = server_interface.subnetRange;
 				if (range <= 8){
+					if ((packet.destIp[0] === IPmatch[0])){
+						ipDestString = packet.destIp.toString();
+						_packet.nMap_collectIp(ipDestString);
+					}
+					if ((packet.sendIp[0] === IPmatch[0])){
+						ipSendString = packet.sendIp.toString();
+					}
 				}
 				if (range > 8 && range <= 16){
 					
@@ -198,7 +205,7 @@ module.exports = (function(){
 						ipDestString = packet.destIp.toString();
 						_packet.nMap_collectIp(ipDestString);
 					}
-					if ((packet.sendIp[0] === IPmatch[0]) && (packet.sendIp[1] === IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
+					if ((packet.sendIp[0] === IPmatch[0]) && (packet.sendIp[1] === IPmatch[1]) && (packet.sendIp[2] === IPmatch[2])){
 						ipSendString = packet.sendIp.toString();
 					}
 
