@@ -6,7 +6,7 @@ var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','
 var ipaddr = require('ipaddr.js');
 var ping = require('../ping');
 
-module.exports = function(){
+module.exports = (function(){
 	
 // Define The Server network Schema for the local network
 	_server = new Promise(function(resolve, reject){
@@ -18,11 +18,10 @@ module.exports = function(){
 		var change = 0;
 		var array = [];
 		os_interfaces.en0.forEach(function(detected_interface){
-				if(detected_interface.family == 'IPv4'){
+				if(detected_interface.family === 'IPv4'){
 				activeInterface = detected_interface;
 			}
 		})
-		var change = 0;
 		var localAddress = [];
 		var localAddressLoop = activeInterface.address.split('.');
 		localAddressLoop.forEach(function(octet){
@@ -61,7 +60,7 @@ module.exports = function(){
 			}
 		return globalInterface;
 
-	})
+	}),
 // define the packet object that sniffs the network for all activity accross the network
 	_packet = {
 		chunk : [],
@@ -72,7 +71,7 @@ module.exports = function(){
 		},
 		nMap_preStore : [],
 		nMap_collectIp : function(ip){
-			if(_packet.nMap_preStore.length == 0){
+			if(_packet.nMap_preStore.length === 0){
 				_packet.nMap_preStore.push(ip);
 			}
 			if(_packet.nMap_preStore.length > 0){
@@ -80,7 +79,7 @@ module.exports = function(){
 					if(ip == e){
 						/* Do Nothing */
 					}else {
-						if(_packet.nMap_preStore.length == 10){
+						if(_packet.nMap_preStore.length === 10){
 							/* Do Nothing */
 						}else{
 							_packet.nMap_preStore.push(e);
@@ -96,7 +95,7 @@ module.exports = function(){
 		bandwidth : {
 			total : function(data){				
 				_packet.chunk.push(data);
-				if(_packet.chunk.length == 1000){
+				if(_packet.chunk.length === 1000){
 					var mbps = 0;
 					var start = _packet.chunk[0].pcap_header.tv_sec;
 					var sMill = _packet.chunk[0].pcap_header.tv_usec;
@@ -111,13 +110,13 @@ module.exports = function(){
 						_packet.packetSize_total += e.pcap_header.len
 					})
 					var bandwidth = (_packet.packetSize_total / time)
-					var mbps = bandwidth / 1000000
+					var finishing_mbps = bandwidth / 1000000
 					_packet.chunk = [];
 					_packet.packetSize_total = 0;
-					_packet.set_int(mbps);				
+					_packet.set_int(finishing_mbps);				
 				}
 				return 
-			},	
+			}	
 		},
 
 		count : 0,
@@ -139,14 +138,18 @@ module.exports = function(){
 	},
 	_packet.IpAddr = function(packet){
 		var ipObj = new Promise(function(resolve, reject){
+			var destIp;
+			var sendIp;
+			var version;
+
 				try {
-					var destIp = packet.payload.payload.daddr.addr
-					var sendIp = packet.payload.payload.saddr.addr
-					var version = packet.payload.payload.version
+					destIp = packet.payload.payload.daddr.addr
+					sendIp = packet.payload.payload.saddr.addr
+					version = packet.payload.payload.version
 				}catch(err){
-					var destIp = packet.payload.dhost.addr;
-					var sendIp = packet.payload.shost.addr;
-					var version = "ARP"
+					destIp = packet.payload.dhost.addr;
+					sendIp = packet.payload.shost.addr;
+					version = "ARP"
 				}
 			 	var data = {
 			 		destIp : destIp,
@@ -158,7 +161,7 @@ module.exports = function(){
 			})
 
 		ipObj.then(function(val){
-			if(val.version == 6 || val.version == 'ARP'){ /* do nothing */ }
+			if(val.version === 6 || val.version === 'ARP'){ /* do nothing */ }
 			else {
 				_packet.subnet(val)
 			}
@@ -169,31 +172,34 @@ module.exports = function(){
 		
 	},
 	_packet.subnet = function(packet){
-		var server_interface = new Promise(function(resolve, reject){
+		new Promise(function(resolve, reject){
 			resolve(_server);
 		}).then(function(server_interface){
 			var range = ipaddr.IPv4.parse(server_interface.netmask).prefixLengthFromSubnetMask();
 			if (packet) {
+				var ipDestString = '';
+				var ipSendString = '';
+				var IPmatch = server_interface.subnetRange;
 				if (range <= 8){
 				}
 				if (range > 8 && range <= 16){
-					var IPmatch = server_interface.subnetRange;
-					if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1])){
-						var ipDestString = packet.destIp.toString();
+					
+					if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1])){
+						ipDestString = packet.destIp.toString();
 						_packet.nMap_collectIp(ipDestString);
 					}
-					if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1])){
-						var ipSendString = packet.sendIp.toString();
+					if ((packet.sendIp[0] === IPmatch[0]) && (packet.sendIp[1] === IPmatch[1])){
+						ipSendString = packet.sendIp.toString();
 					}
 				}
 				if (range > 16){
-					var IPmatch = server_interface.subnetRange
+					
 					if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1]) && (packet.destIp[2] === IPmatch[2])){
-						var ipDestString = packet.destIp.toString();
+						ipDestString = packet.destIp.toString();
 						_packet.nMap_collectIp(ipDestString);
 					}
-					if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
-						var ipSendString = packet.sendIp.toString();
+					if ((packet.sendIp[0] === IPmatch[0]) && (packet.sendIp[1] === IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
+						ipSendString = packet.sendIp.toString();
 					}
 
 				}
@@ -237,7 +243,7 @@ module.exports = function(){
 		packet: _packet,
 		server: _server
 	}
-}()
+}())
 
 
 
