@@ -24,7 +24,7 @@ var arp = function(server_interface){
 				}
 				if(cut2.includes(server_interface.broadcast)){
 					returnData.broadcast = data.ip;
-				}else if (data.mac != '(incomplete)'){
+				}else if (data.mac !== '(incomplete)'){
 					result.push(data);
 				}
 				returnData.devices = result;
@@ -36,6 +36,7 @@ var arp = function(server_interface){
 
 	var checkMacDb = new Promise(function(resolve, reject){
 		db.devices.distinct('mac', {}, function(err, docs){
+			if(err){ throw err };
 			resolve(docs);
 		});
 	});
@@ -51,7 +52,7 @@ var arp = function(server_interface){
 		var newNmaps = utils.arrayDiffOnce(checkDbResults, macCompare);
 		newNmaps.forEach(function(newDevice){
 			arpResults.devices.forEach(function(arpDevice){
-				if( newDevice == arpDevice.mac ){
+				if( newDevice === arpDevice.mac ){
 					nmap(arpDevice);
 				}
 			});
