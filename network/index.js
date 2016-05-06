@@ -62,7 +62,7 @@ module.exports = (function(){
 
 	}),
 // define the packet object that sniffs the network for all activity accross the network
-	var _packet = {
+	_packet = {
 		chunk : [],
 		nMap : function(ip){
 			var opts = {
