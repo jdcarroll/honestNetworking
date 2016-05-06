@@ -1,15 +1,14 @@
-honestApp.controller('devicesCtrl', function($scope, socket){
+honestApp.controller('devicesCtrl', function($scope, $http, socket){
 	// console.log('Hi from device controller')
 	socket.on('devices', function(devices){
+		console.log(devices);
 		$scope.devices = devices;
-		$scope.devices.forEach(function(e){
-			// console.log('hostname type:', e.hostname)
-
-		})
-		// console.log($scope.devices);
-
-		if (typeof($scope.devices.hostname) == 'object'){
-			// console.log($scope.devices.hostname);
-		}
 	})
+
+	$http.get('/dashboard/devices').then(function(response) {
+		console.log('/dashboard/devices');
+        $scope.devices = response.data;
+    }, function errorCallback(response) {
+    	console.log(response);
+  	});
 })

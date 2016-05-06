@@ -177,23 +177,23 @@ module.exports = function(){
 				if (range <= 8){
 				}
 				if (range > 8 && range <= 16){
-					var IPmatch = interface.subnetRange
+					var IPmatch = server_interface.subnetRange;
 					if ((packet.destIp[0] == IPmatch[0]) && (packet.destIp[1] == IPmatch[1])){
-						var ipDestString = packet.destIp.toString()
-						_packet.nMap_collectIp(ipDestString)
+						var ipDestString = packet.destIp.toString();
+						_packet.nMap_collectIp(ipDestString);
 					}
 					if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1])){
-						var ipSendString = packet.sendIp.toString()
+						var ipSendString = packet.sendIp.toString();
 					}
 				}
 				if (range > 16){
-					var IPmatch = interface.subnetRange
+					var IPmatch = server_interface.subnetRange
 					if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1]) && (packet.destIp[2] === IPmatch[2])){
-						var ipDestString = packet.destIp.toString()
-						_packet.nMap_collectIp(ipDestString)
+						var ipDestString = packet.destIp.toString();
+						_packet.nMap_collectIp(ipDestString);
 					}
 					if ((packet.sendIp[0] == IPmatch[0]) && (packet.sendIp[1] == IPmatch[1]) && (packet.sendIp[2] == IPmatch[2])){
-						var ipSendString = packet.sendIp.toString()
+						var ipSendString = packet.sendIp.toString();
 					}
 
 				}

@@ -7,7 +7,7 @@ module.exports = {
 		returnArray = [];
 
     for (var i = 0; i < a2.length; i++){
-        if (a1.indexOf(a2[i]) == -1){
+        if (a1.indexOf(a2[i]) === -1){
             returnArray.push(a2[i]);
         }
     }
@@ -27,6 +27,11 @@ module.exports = {
 
 	ab2str: function(buf) {
 	  return String.fromCharCode.apply(null, new Uint16Array(buf));
-	}
+	},
 
+	// Array.prototype.mapTo = function(object){
+	// 	for(var i = 0; i < this.length; i++){
+	// 		object.key = this[i];
+	// 	}
+	// }
 }
