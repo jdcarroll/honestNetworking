@@ -188,8 +188,7 @@ module.exports = (function(){
 					if ((packet.sendIp[0] === IPmatch[0])){
 						ipSendString = packet.sendIp.toString();
 					}
-				}
-				if (range > 8 && range <= 16){
+				} else if (range > 8 && range <= 16){
 					
 					if (packet.destIp[1] === IPmatch[1]){
 						ipDestString = packet.destIp.toString();
@@ -198,8 +197,7 @@ module.exports = (function(){
 					if (packet.sendIp[1] === IPmatch[1]){
 						ipSendString = packet.sendIp.toString();
 					}
-				}
-				if (range >= 17){
+				}else{
 					
 					if (packet.destIp[2] === IPmatch[2]){
 						ipDestString = packet.destIp.toString();
