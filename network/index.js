@@ -199,7 +199,7 @@ module.exports = (function(){
 						ipSendString = packet.sendIp.toString();
 					}
 				}
-				if (range > 16){
+				if (range >= 17){
 					
 					if (packet.destIp[2] === IPmatch[2]){
 						ipDestString = packet.destIp.toString();
