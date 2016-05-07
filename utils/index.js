@@ -29,9 +29,8 @@ module.exports = {
 	  return String.fromCharCode.apply(null, new Uint16Array(buf));
 	},
 
-	// Array.prototype.mapTo = function(object){
-	// 	for(var i = 0; i < this.length; i++){
-	// 		object.key = this[i];
-	// 	}
-	// }
+	debug : function(title, obj) {
+    if (process.env.DEBUG) console.log('\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n', title, '\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n', obj, '\n===========================================\n\n');
+  }
+	
 }
