@@ -191,21 +191,21 @@ module.exports = (function(){
 				}
 				if (range > 8 && range <= 16){
 					
-					if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1])){
+					if (packet.destIp[1] === IPmatch[1]){
 						ipDestString = packet.destIp.toString();
 						_packet.nMap_collectIp(ipDestString);
 					}
-					if ((packet.sendIp[0] === IPmatch[0]) && (packet.sendIp[1] === IPmatch[1])){
+					if (packet.sendIp[1] === IPmatch[1]){
 						ipSendString = packet.sendIp.toString();
 					}
 				}
 				if (range > 16){
 					
-					if ((packet.destIp[0] === IPmatch[0]) && (packet.destIp[1] === IPmatch[1]) && (packet.destIp[2] === IPmatch[2])){
+					if (packet.destIp[2] === IPmatch[2]){
 						ipDestString = packet.destIp.toString();
 						_packet.nMap_collectIp(ipDestString);
 					}
-					if ((packet.sendIp[0] === IPmatch[0]) && (packet.sendIp[1] === IPmatch[1]) && (packet.sendIp[2] === IPmatch[2])){
+					if (packet.sendIp[2] === IPmatch[2]){
 						ipSendString = packet.sendIp.toString();
 					}
 
