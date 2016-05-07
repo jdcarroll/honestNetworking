@@ -9,7 +9,7 @@ var ping = require('../ping');
 module.exports = (function(){
 	
 // Define The Server network Schema for the local network
-	var _server = new Promise(function(resolve, reject){
+	_server = new Promise(function(resolve, reject){
 		var interfaces = os.networkInterfaces();
 		resolve(interfaces);
 	}).then(function(os_interfaces){
