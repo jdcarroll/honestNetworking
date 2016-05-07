@@ -21,5 +21,9 @@ a {
 }
 
 #page-wrapper {
-	background-image: url('../assets/whiteTyle.png')
+	background-image: url('../assets/ricepaper_v3.png')
+}
+
+.active > a {
+	color: #337ab7;
 }
