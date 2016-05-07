@@ -1,6 +1,7 @@
 var network = require('../network');
 var airport = require('../airport');
 var devices = require('../devices');
+// console.log('server_interface from routes:',server_interface);
 module.exports = (function(server_interface){
 
 	_publicDir = {
@@ -26,19 +27,19 @@ module.exports = (function(server_interface){
 		method: 'GET',
 		path: '/dashboard',
 		handler: function(req, res){
-			res(network.server.activeInterface())
+			res(network.server.activeInterface());
 		}
 	}
 
 	_devices = {
 		method: 'GET',
 		path: '/dashboard/devices',
-		handler: function(req, res){
-			console.log('------------------------------');
+		handler: function(request, response){
 			console.log('/dashboard/devices------------');
-			var deviceArray = devices;
-			// console.log('device:', deviceArray);
-			res(deviceArray);
+			// because of the use of async.js I am passing the response into the waterfall object
+			devices.waterfall(response);
+			// this way I can execute the response from within the the waterfall object
+			console.log('------------------------------');
 		}
 	}
 

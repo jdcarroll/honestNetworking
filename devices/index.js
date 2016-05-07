@@ -16,26 +16,40 @@ the ip. This will push its mac address to the arp table
 	2-b. assuming that the mac address is not present in the arp table from step 1 we run
 	an nmapscan of the device and store data in the database. */
 //Dependancys
-var arp = require('../arp');
 var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','devices']);
-var nmap = require('../nmap');
-var ping = require('../ping');
+var async = require('async');
+var utils = require('../utils');
 
-var device = function(socket){
-	var subnet = global.honestServer.subnetRange.toString();
-	var search = subnet.replace(/,/g,'.');
-	var query = '{ip : {$regex: "^'+ search +'"}}';
+module.exports = {
+	
+	waterfall : function(response){
+		async.waterfall([
 
-	var get = new Promise(function(resolve, reject){
-		db.devices.find({ip : {$regex: '^'+ search }}, function(err, docs){
-			resolve(docs)
+			function(callback){
+				// 1. create server object 
+				var server_interface = require('../network').server.then(function(data){
+					callback(null, data);
+				});
+			},
+
+			function(serverObject, callback){
+				// 2. grab the subnet range fom the serverObject
+				console.log(serverObject);
+				var subnet = serverObject.subnetRange.toString().replace(/,/g,'.');
+				callback(null, subnet);
+			},
+
+			function(subnet, callback){
+				// 3. serach DB for all records within a give in subnet
+				db.devices.find({ ip : { $regex: '^'+ subnet } }, function(err, docs){
+					if (err) { utils.debug('Error from DB', err) }
+					callback(null, docs);
+				})
+			}
+
+		], function(err, result){
+			// 4. pass forward the records from the DB to the front end
+			response(result);
 		})
-	}).then(function(value){
-		socket.emit('devices', value);
-	})
-	get.catch(function(err){
-		console.log(err);
-	})
+	}
 }
-
-module.exports = device
