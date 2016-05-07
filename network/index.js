@@ -174,7 +174,8 @@ module.exports = (function(){
 	_packet.subnet = function(packet){
 		new Promise(function(resolve, reject){
 			resolve(_server);
-		}).then(function(server_interface){
+		}).then(
+			function(server_interface){
 			var range = ipaddr.IPv4.parse(server_interface.netmask).prefixLengthFromSubnetMask();
 			if (packet) {
 				var ipDestString = '';
