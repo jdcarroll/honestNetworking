@@ -34,7 +34,6 @@ module.exports = {
 
 			function(serverObject, callback){
 				// 2. grab the subnet range fom the serverObject
-				console.log(serverObject);
 				var subnet = serverObject.subnetRange.toString().replace(/,/g,'.');
 				callback(null, subnet);
 			},

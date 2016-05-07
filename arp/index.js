@@ -36,7 +36,7 @@ var arp = function(server_interface){
 
 	var checkMacDb = new Promise(function(resolve, reject){
 		db.devices.distinct('mac', {}, function(err, docs){
-			if(err){ throw err };
+			if(err){ throw err }
 			resolve(docs);
 		});
 	});

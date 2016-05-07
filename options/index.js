@@ -6,7 +6,7 @@ module.exports = {
         console: [{
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ log: '*', response: '*' }]
+            args: []
         }, {
             module: 'good-console'
         }, 'stdout'],
