@@ -22,7 +22,7 @@ var computer = function(computer){
  				cpe: [],
  				open_ports: []
  			}
-			parseString(stdout, function (error, result){
+			parseString(stdout, function mainScan(error, result){
 				// if error exists and debug mode is on console error
 				if (error){
 					utils.debug('Parse String from Nmap:', error);
