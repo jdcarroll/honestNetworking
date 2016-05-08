@@ -17,7 +17,6 @@ var airport = require('./airport');
 var options = require('./options');
 const Good = require('good');
 var utils = require('./utils');
-var inert = require('inert');
 // Determine if debug mode is turned on
 utils.debug('Is Debug Mode On?', process.env.DEBUG);
 
