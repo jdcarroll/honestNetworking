@@ -27,58 +27,62 @@ var computer = function(computer){
 				if (error){
 					utils.debug('Parse String from Nmap:', error);
 				}
-
+					utils.debug('Computer Object', computer);
 					// try to JSONParse 
 					var portData = result.nmaprun.host[0].ports;
-					for(var i = 0; i < portData[0].port.length; i++){
-						var portIterator = portData[0].port[i].service[0];
-// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=						
-						// add all open ports to device
-						if(portIterator.$.name !== 'unknown'){
-							device.open_ports.push(portIterator.$.name);
-						}
-						// MacBook Pro discovery Schema
-						if(portIterator.$.name === 'afp'){
-							device.type = portIterator.$.extrainfo.split(';');
-							device.ostype = portIterator.$.ostype;
-						}
-						if(portIterator.$.name === 'vnc'){
-							device.osType = portIterator.$.ostype;
-						}
-						if(portIterator.$.hostname){
-							 device.hostname = portIterator.$.hostname;
-						}
-
-						// ESPON Printer Profile
-						if(portIterator.$.name === 'upnp'){
-							device.hostname = portIterator.$.product;
-							device.cpe.push(portIterator.$.cpe);
-							device.info = portIterator.$.extrainfo;
-							device.type = portIterator.$.devicetype;
-							device.ostype = portIterator.$.ostype;
-								
-						}
-						if (portIterator.$.name === 'domain'){
-							device.type = portIterator.$.name;
-						}
-
-						// add port extra info
-						if(portIterator.$.extrainfo){
-							device.info = portIterator.$.extrainfo;
-
-							// Apple TV Profile
-							if(device.info.includes('Apple TV')){
-								device.hostname = 'Apple TV';
+					try{
+						for(var i = 0; i < portData[0].port.length; i++){
+							var portIterator = portData[0].port[i].service[0];
+	// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=						
+							// add all open ports to device
+							if(portIterator.$.name !== 'unknown'){
+								device.open_ports.push(portIterator.$.name);
 							}
+							// MacBook Pro discovery Schema
+							if(portIterator.$.name === 'afp'){
+								device.type = portIterator.$.extrainfo.split(';');
+								device.ostype = portIterator.$.ostype;
+							}
+							if(portIterator.$.name === 'vnc'){
+								device.osType = portIterator.$.ostype;
+							}
+							if(portIterator.$.hostname){
+								 device.hostname = portIterator.$.hostname;
+							}
+
+							// ESPON Printer Profile
+							if(portIterator.$.name === 'upnp'){
+								device.hostname = portIterator.$.product;
+								device.cpe.push(portIterator.$.cpe);
+								device.info = portIterator.$.extrainfo;
+								device.type = portIterator.$.devicetype;
+								device.ostype = portIterator.$.ostype;
+									
+							}
+							if (portIterator.$.name === 'domain'){
+								device.type = portIterator.$.name;
+							}
+
+							// add port extra info
+							if(portIterator.$.extrainfo){
+								device.info = portIterator.$.extrainfo;
+
+								// Apple TV Profile
+								if(device.info.includes('Apple TV')){
+									device.hostname = 'Apple TV';
+								}
+							}
+							if(portIterator.$.name === 'rtsp'){
+								device.ostype = portIterator.$.ostype;
+							}
+							// Future to be discovered Profile
+							if(portIterator.cpe){
+								device.cpe.push(portIterator.cpe);
+							}
+	// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=	
 						}
-						if(portIterator.$.name === 'rtsp'){
-							device.ostype = portIterator.$.ostype;
-						}
-						// Future to be discovered Profile
-						if(portIterator.cpe){
-							device.cpe.push(portIterator.cpe);
-						}
-// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=	
+					}catch(err){
+						utils.debug('Cant Parse Nmap Scan Error' ,err)
 					}
 			})
 			resolve(device);
@@ -92,8 +96,6 @@ var computer = function(computer){
 		})
 	})
 }
-
-computer({ip: '10.2.0.24', mac: 'abc'});
 
 module.exports = computer
 
