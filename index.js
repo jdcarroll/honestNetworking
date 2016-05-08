@@ -62,13 +62,13 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 	io.on('connection', function (socket) {
 		socket.emit('connection', server_interface);
 		netstat(socket);
-		ping(server_interface);
 		var packetStream = network.packet.listen(socket);
 
 		// Speed Test Interval
 		setInterval(function(){
 			// wrapped it a try catch only to prevent crash on falure
 			try {
+				ping(server_interface);
 				Test(socket);
 			}catch(err){
 				utils.debug('SpeedTest', err);
