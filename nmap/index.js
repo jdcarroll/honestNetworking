@@ -22,7 +22,7 @@ var computer = function(computer){
  				cpe: [],
  				open_ports: []
  			}
-			parseString(stdout, function(error, result){
+			parseString(stdout, function (error, result){
 				// if error exists and debug mode is on console error
 				if (error){
 					utils.debug('Parse String from Nmap:', error);
@@ -32,14 +32,11 @@ var computer = function(computer){
 					var portData = result.nmaprun.host[0].ports;
 					for(var i = 0; i < portData[0].port.length; i++){
 						var portIterator = portData[0].port[i].service[0];
-
 // using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=						
 						// add all open ports to device
 						if(portIterator.$.name !== 'unknown'){
 							device.open_ports.push(portIterator.$.name);
 						}
-						
-
 						// MacBook Pro discovery Schema
 						if(portIterator.$.name === 'afp'){
 							device.type = portIterator.$.extrainfo.split(';');
@@ -75,7 +72,6 @@ var computer = function(computer){
 							}
 						}
 						if(portIterator.$.name === 'rtsp'){
-							device.type = portIterator.$.extrainfo;
 							device.ostype = portIterator.$.ostype;
 						}
 						// Future to be discovered Profile
