@@ -19,7 +19,7 @@ the ip. This will push its mac address to the arp table
 var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','devices']);
 var async = require('async');
 var utils = require('../utils');
-
+var server_interface = require('../network').server;
 module.exports = {
 	
 	waterfall : function(response){
@@ -27,7 +27,7 @@ module.exports = {
 
 			function(callback){
 				// 1. create server object 
-				var server_interface = require('../network').server.then(function(data){
+				server_interface.then(function(data){
 					callback(null, data);
 				});
 			},
@@ -47,6 +47,9 @@ module.exports = {
 			}
 
 		], function(err, result){
+			if(err){
+				utils.debug('Waterfall Grab Device Failure', err);
+			}
 			// 4. pass forward the records from the DB to the front end
 			response(result);
 		})
