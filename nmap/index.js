@@ -52,9 +52,7 @@ var computer = function(computer){
 							if(portIterator.$.name === 'upnp'){
 								device.hostname = portIterator.$.product;
 								device.cpe.push(portIterator.$.cpe);
-								device.info = portIterator.$.extrainfo;
 								device.type = portIterator.$.devicetype;
-								device.ostype = portIterator.$.ostype;
 									
 							}
 							if (portIterator.$.name === 'domain'){
