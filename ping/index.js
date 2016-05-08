@@ -16,7 +16,7 @@ var ping = function(server_interface){
 	var prep = server_interface.subnetRange.toString();
 	broadcast = prep.replace(/,/g,'.');
 	server_interface.broadcast = broadcast + octet;
-	shell.exec("ping " + broadcast + octet ,{ silent: true, timeout: 3000 });
+	shell.exec("ping " + broadcast + octet ,{ async: true, silent: true, timeout: 3000 });
 	arp(server_interface);
 }
 
