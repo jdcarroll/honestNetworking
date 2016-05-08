@@ -15,19 +15,22 @@ var arp = function(server_interface){
 				var item = e.split(' ');
 				
 				var cut1 = item[1].replace('(','');
-				var cut2 = cut1.replace(')',"");
+				cut1 = cut1.replace(')',"");
+				var mask = cut1.split('.');
 
-				var data = {
-					ip : cut2,
-					mac : item[3],
-					iterface : item[5]
-				}
-				if(cut2.includes(server_interface.broadcast)){
-					returnData.broadcast = data.ip;
-				}else if (data.mac !== '(incomplete)'){
-					result.push(data);
-				}
-				returnData.devices = result;
+				if (mask[0] !== '224'){
+					var data = {
+						ip : cut1,
+						mac : item[3],
+						iterface : item[5]
+					}
+					if(cut1.includes(server_interface.broadcast)){
+						returnData.broadcast = data.ip;
+					}else if (data.mac !== '(incomplete)'){
+						result.push(data);
+					}
+					returnData.devices = result;
+				}				
 				
 			});
 			resolve(returnData)
@@ -36,7 +39,7 @@ var arp = function(server_interface){
 
 	var checkMacDb = new Promise(function(resolve, reject){
 		db.devices.distinct('mac', {}, function(err, docs){
-			if(err){ throw err }
+			if(err){ utils.debug('Arp db Check:', err); }
 			resolve(docs);
 		});
 	});
@@ -59,14 +62,10 @@ var arp = function(server_interface){
 		});
 
 	}).catch(function(err){
-		console.log(err);
+		utils.debug('arp promise catch', err);
 	})
 
 }
-
-
-
-
 
 module.exports = arp;
 
