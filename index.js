@@ -17,7 +17,7 @@ var airport = require('./airport');
 var options = require('./options');
 const Good = require('good');
 var utils = require('./utils');
-
+var inert = require('inert');
 // Determine if debug mode is turned on
 utils.debug('Is Debug Mode On?', process.env.DEBUG);
 
@@ -30,8 +30,8 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 // Kick off server after server object is established
 }).then(function(server_interface){
 
-	var devices = require('./devices');
-	server.register([require('inert')], (err) => {
+	
+	server.register([inert], (err) => {
 		// show error if inert fails and debug mode is on
 		if (err){
 			utils.debug('Faliure to grab inert:', err);
@@ -49,7 +49,7 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 	})
 	// url record tracking 
 	server.register({
-	    register: require('good'),
+	    register: Good,
 	    options: options
 	}, (err) => {
 
