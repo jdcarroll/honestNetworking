@@ -5,6 +5,7 @@ var pcap = require('pcap2');
 var db = require('mongojsom')('honest',['usageBandwidth','bandwidth','packets','devices']);
 var ipaddr = require('ipaddr.js');
 var ping = require('../ping');
+var utils = require('../utils');
 
 module.exports = (function(){
 	
@@ -172,44 +173,27 @@ module.exports = (function(){
 		
 	},
 	_packet.subnet = function(packet){
+		// packet subnet takes the packets as an argument
 		new Promise(function(resolve, reject){
 			resolve(_server);
-		}).then(
-			function(server_interface){
+		}).then(function(server_interface){
 			var range = ipaddr.IPv4.parse(server_interface.netmask).prefixLengthFromSubnetMask();
-			if (packet) {
-				var ipDestString = '';
-				var ipSendString = '';
-				var IPmatch = server_interface.subnetRange;
-				if (range <= 8){
-					if ((packet.destIp[0] === IPmatch[0])){
-						ipDestString = packet.destIp.toString();
-						_packet.nMap_collectIp(ipDestString);
-					}
-					if ((packet.sendIp[0] === IPmatch[0])){
-						ipSendString = packet.sendIp.toString();
-					}
-				} else if (range > 8 && range <= 16){
-					
-					if (packet.destIp[1] === IPmatch[1]){
-						ipDestString = packet.destIp.toString();
-						_packet.nMap_collectIp(ipDestString);
-					}
-					if (packet.sendIp[1] === IPmatch[1]){
-						ipSendString = packet.sendIp.toString();
-					}
-				}else{
-					
-					if (packet.destIp[2] === IPmatch[2]){
-						ipDestString = packet.destIp.toString();
-						_packet.nMap_collectIp(ipDestString);
-					}
-					if (packet.sendIp[2] === IPmatch[2]){
-						ipSendString = packet.sendIp.toString();
-					}
+				if (packet) {
+					var ipDestString = '';
+					var ipSendString = '';
+					var IPmatch = server_interface.subnetRange;
 
-				}
-			} else {/*Do Nothing*/}
+					for(var i = 0; i < packet.destIp.length; i++){
+						if(packet.destIp[i] === IPmatch[i]){
+							ipDestString = packet.destIp.toString();
+							_packet.nMap_collectIp(ipDestString);
+							break;
+						}else if(packet.sendIp[i] === IPmatch[i]){
+							ipSendString = packet.sendIp.toString();
+							_packet.nMap_collectIp(ipSendString);
+						}
+					}
+				}else {/*Do Nothing*/}
 		})
 		
 
@@ -238,11 +222,11 @@ module.exports = (function(){
 					var subnet = _packet.subnet(packets);
 					var ip = _packet.IpAddr(packets);
 				}catch(err){
-					console.log('packet pcapSession ERROR:',err);
+					utils.debug('packet pcapSession ERROR:', err);
 				}			
 			})
 		}catch(err){
-			console.log('packet.listen ERROR:',err);
+			utils.debug('packet.listen ERROR:', err);
 		}
 	}
 	return {
