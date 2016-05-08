@@ -10,7 +10,6 @@
 var shell = require('shelljs');
 var parseString = require('xml2js').parseString;
 var db = require('mongojs')('honest',['devices']);
-var profiles = require('../profiles');
 var utils = require('../utils');
 var computer = function(computer){
 	new Promise(function(resolve, reject){
@@ -27,7 +26,6 @@ var computer = function(computer){
 				if (error){
 					utils.debug('Parse String from Nmap:', error);
 				}
-					utils.debug('Computer Object', computer);
 					// try to JSONParse 
 					var portData = result.nmaprun.host[0].ports;
 					try{
