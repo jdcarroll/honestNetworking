@@ -18,6 +18,15 @@ Honest Networking requires node version 5.1.1 or higher to successfull do packet
 #### Step 1 Add Symlink for airport
 
 ```
-sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport/usr/local/bin/airport
+$ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport/usr/local/bin/airport
+
+```
+
+#### Step 2 using gulp npm and bower 
+
+we are going to now use npm to install all the node modules, bower to install all the frontend tools and gulp to kick off the server. 
+
+```
+$ npm install
 
 ```
