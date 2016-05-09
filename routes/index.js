@@ -35,11 +35,9 @@ module.exports = (function(server_interface){
 		method: 'GET',
 		path: '/dashboard/devices',
 		handler: function(request, response){
-			console.log('/dashboard/devices------------');
 			// because of the use of async.js I am passing the response into the waterfall object
 			devices.waterfall(response);
 			// this way I can execute the response from within the the waterfall object
-			console.log('------------------------------');
 		}
 	}
 
