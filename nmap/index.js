@@ -19,7 +19,9 @@ var computer = function(computer){
 			// xml to JSON
 			var device = {
  				cpe: [],
- 				open_ports: []
+ 				open_ports: [],
+ 				ip: computer.ip,
+ 				mac: computer.mac
  			}
 			parseString(stdout, function mainScan(error, result){
 				// if error exists and debug mode is on console error
@@ -84,12 +86,15 @@ var computer = function(computer){
 			resolve(device);
 		})
 	}).then(function(device){
-		utils.debug('device from .then', device);
-		db.devices.insert(device, function(err, docs){
-			if(err) { 
-				utils.debug('failure to device insert into DB Nmap:', err);
-			}
-		})
+		if(device.cpe.length > 0){
+			db.devices.insert(device, function(err, docs){
+				if(err) { 
+					utils.debug('failure to device insert into DB Nmap:', err);
+				}
+				utils.debug('Inserted object', device);
+			})
+		}
+		
 	})
 }
 

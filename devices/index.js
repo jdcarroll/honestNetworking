@@ -43,6 +43,7 @@ module.exports = {
 				db.devices.find({ ip : { $regex: '^'+ subnet } }, function(err, docs){
 					if (err) { utils.debug('Error from DB', err) }
 					callback(null, docs);
+					utils.debug('Success at pull devices from DB:', docs);
 				})
 			}
 
