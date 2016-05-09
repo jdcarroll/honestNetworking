@@ -10,7 +10,7 @@ I am working on building a gulp file that will install the entire environment fo
 
 As of right now this application will only run on MAC OSX.  I am working on the linux build out but currently there a OS dependant features of this app that require the MAC OSX airport utility.
 
-Honest Networking requires node version 5.1.1 or higher to successfull do packet anyalis as it relies on Pcap2(https://github.com/andygreenegrass/node-pcap)
+Honest Networking requires node version 5.1.1 or higher to successfull do packet anyalis as it relies on [Pcap2](https://github.com/andygreenegrass/node-pcap)
 
 
 ## Install Honest Networking
