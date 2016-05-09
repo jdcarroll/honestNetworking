@@ -28,5 +28,20 @@ we are going to now use npm to install all the node modules, bower to install al
 
 ```
 $ npm install
+```
 
+There have been reported problems of bower not installing all the modules correctly if this a problem then use.
+
+```
+$ sudo bower install --allow-root
+```
+Otherwise just use 
+```
+$ bower install
+``` 
+
+Once all modules are installed run gulp and it wll kick off
+
+```
+$ gulp
 ```
