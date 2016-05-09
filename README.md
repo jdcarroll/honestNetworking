@@ -4,7 +4,7 @@
 
 #### Temporary Disclaimer
 
-I am working on building a gulp file that will install the entire environment for you. This way you can just git clone or download the zip and then run gulp. However this is not finishe at the moment so we have to do things manually right now.
+I am working on building a gulp file that will install the entire environment for you. This way you can just git clone or download the zip and then run gulp. However this is not finished at the moment so we have to do things manually right now.
 
 ### System Requirements
 
