@@ -17,7 +17,7 @@ Honest Networking requires node version 5.1.1 or higher to successfull do packet
 
 #### Step 1 Add Symlink for airport
 
-`
+```
 sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport/usr/local/bin/airport
 
-`
+```
