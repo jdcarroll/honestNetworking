@@ -80,9 +80,7 @@ var computer = function(computer, socket){
 	// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=	
 						}
 					}catch(err){
-						if(err !== "[TypeError: Cannot read property '0' of undefined]"){
-							utils.debug('Cant Parse Nmap Scan Error' ,err);
-						}
+						utils.debug('Cant Parse Nmap Scan Error' ,err);
 					}
 			})
 			resolve(device);
