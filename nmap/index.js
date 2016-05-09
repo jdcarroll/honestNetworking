@@ -11,7 +11,7 @@ var shell = require('shelljs');
 var parseString = require('xml2js').parseString;
 var db = require('mongojs')('honest',['devices']);
 var utils = require('../utils');
-var computer = function(computer){
+var computer = function(computer, socket){
 	new Promise(function(resolve, reject){
 
 			shell.exec("nmap -vv -A " + computer.ip + " -oX -", {silent:true}, function(code, stdout, stderr){
@@ -80,7 +80,9 @@ var computer = function(computer){
 	// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=	
 						}
 					}catch(err){
-						utils.debug('Cant Parse Nmap Scan Error' ,err)
+						if(err !== "[TypeError: Cannot read property '0' of undefined]"){
+							utils.debug('Cant Parse Nmap Scan Error' ,err);
+						}
 					}
 			})
 			resolve(device);
@@ -92,6 +94,7 @@ var computer = function(computer){
 					utils.debug('failure to device insert into DB Nmap:', err);
 				}
 				utils.debug('Inserted object', device);
+				socket.emit('newDeviceSocket', device);
 			})
 		}
 		

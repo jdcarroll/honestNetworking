@@ -2,7 +2,7 @@
 
 var shell = require('shelljs');
 var arp = require('../arp');
-var ping = function(server_interface){
+var ping = function(server_interface, socket){
 	var octet
 	if(server_interface.subnetRange.length === 3){
 		octet = '.255';
@@ -17,7 +17,7 @@ var ping = function(server_interface){
 	broadcast = prep.replace(/,/g,'.');
 	server_interface.broadcast = broadcast + octet;
 	shell.exec("ping " + broadcast + octet ,{ async: true, silent: true, timeout: 3000 });
-	arp(server_interface);
+	arp(server_interface, socket);
 }
 
 module.exports = ping;

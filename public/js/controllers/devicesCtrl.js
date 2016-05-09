@@ -1,7 +1,7 @@
 honestApp.controller('devicesCtrl', function($scope, $http, socket){
 	// console.log('Hi from device controller')
-	socket.on('devices', function(devices){
-		$scope.devices = devices;
+	socket.on('newDeviceSocket', function(device){
+		$scope.devices += device;
 	})
 
 	$http.get('/dashboard/devices').then(function(response) {

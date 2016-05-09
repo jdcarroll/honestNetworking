@@ -4,7 +4,7 @@ var shell = require('shelljs');
 var db = require('mongojs')('honest',['devices']);
 var nmap = require('../nmap');
 var utils = require('../utils');
-var arp = function(server_interface){
+var arp = function(server_interface, socket){
 	var arpResults = new Promise(function(resolve, reject){
 		var returnData = {};
 		shell.exec("arp -a", {silent:true}, function(code, stdout, stderr){ 
@@ -49,14 +49,16 @@ var arp = function(server_interface){
 		var arpResults = arpCompareValues[1];
 		macCompare = [];
 		arpResults.devices.forEach(function(arpDiscoverMacs){
-
 			macCompare.push(arpDiscoverMacs.mac);
 		});
+
 		var newNmaps = utils.arrayDiffOnce(checkDbResults, macCompare);
+		utils.debug('new nmaps', newNmaps);
 		newNmaps.forEach(function(newDevice){
+			utils.debug('newDevice', newDevice);
 			arpResults.devices.forEach(function(arpDevice){
 				if( newDevice === arpDevice.mac ){
-					nmap(arpDevice);
+					nmap(arpDevice, socket);
 				}
 			});
 		});

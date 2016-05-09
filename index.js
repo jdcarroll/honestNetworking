@@ -67,12 +67,20 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 		setInterval(function(){
 			// wrapped it a try catch only to prevent crash on falure
 			try {
-				ping(server_interface);
 				Test(socket);
 			}catch(err){
 				utils.debug('SpeedTest', err);
 			}
 		}, 10000)
+		// ping needs to have its own interval to compensate for nmap run time
+		// there might be a better way to handle this
+		setInterval(function(){
+			try{
+				ping(server_interface, socket);
+			}catch(err){
+				utils.debug('Ping kickoff Error', err);
+			}
+		}, 180000);
 
 	});
 	// start the actual server and console server info
