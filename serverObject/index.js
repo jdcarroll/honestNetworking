@@ -54,6 +54,7 @@ var _server = {
 		}
 		// add last property of global object subnet range
 		var range = ipaddr.IPv4.parse(globalInterface.netmask).prefixLengthFromSubnetMask();
+			utils.debug('range', range);
 			// A class subnet
 			if(range <= 8){
 				globalInterface.subnetRange = [
@@ -62,14 +63,14 @@ var _server = {
 
 			}
 			// B class Subnet
-			if(range > 8 && range <= 23){
+			if(range > 8 && range <= 17){
 				globalInterface.subnetRange = [
 					globalInterface.address[0],
 					globalInterface.address[1]
 				]
 			}
 			// C class subnet
-			if(range >= 24 ){
+			if(range >= 18 ){
 				globalInterface.subnetRange = [
 					globalInterface.address[0],
 					globalInterface.address[1],

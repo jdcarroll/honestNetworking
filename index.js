@@ -96,7 +96,7 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 	});
 	// start the actual server and console server info
 	server.start(function () {		
-		console.log('Server is running at:', server.info.uri);
+		console.log('Server is running at: localhost:'+config.server_port);
     });
 });
 // Error handling for server object promis failure

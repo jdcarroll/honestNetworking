@@ -41,9 +41,11 @@ Otherwise just use
 ```
 $ bower install
 ``` 
-
+Before we actually kick off the app we need to have mongo running.
+```
+$ mongod
+```
 Once all modules are installed run gulp and it wll kick off
-
 ```
 $ gulp
 ```
