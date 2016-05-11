@@ -51,4 +51,5 @@ $ gulp
 its super secret so please don't tell anyone.
 
 username : admin
+
 password : password
