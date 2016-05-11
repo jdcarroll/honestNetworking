@@ -53,7 +53,6 @@ var computer = function(computer, socket){
 							// ESPON Printer Profile
 							if(portIterator.$.name === 'upnp'){
 								device.hostname = portIterator.$.product;
-								device.cpe.push(portIterator.$.cpe);
 								device.type = portIterator.$.devicetype;
 									
 							}
