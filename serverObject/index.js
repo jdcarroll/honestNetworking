@@ -16,15 +16,16 @@ var _server = {
 		//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		// os_interfaces is an object with properties that are arrays and contain objects
 		for (prop in os_interfaces){
-			// the goal here is to loop through all objects in all arrays
-			os_interfaces[prop].forEach(function(detected_interface){
-					// If the netCard contains IPv4 
+			if(os_interfaces.hasOwnProperty(prop)){
+				os_interfaces[prop].forEach(function (detected_interface){
+					// If the netCard contains IPv4
 					if(detected_interface.family === 'IPv4'){
 						// then I know that this is the active card
 						activeInterface = detected_interface;
 						activeInterface.netCardName = prop;
-				}
-			})
+					}
+				})
+			}
 		}
 		//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		// prepare globalInterface.address for the rest of the system
