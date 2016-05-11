@@ -1,24 +1,36 @@
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Main Server File
-var Hapi = require('hapi');
-var routes = require('./routes');
-var network = require('./network');
-var pcap = require('pcap2');
-var inert = require('inert');
-var server = new Hapi.Server();
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// require modules
+var Hapi = require('hapi');// server framework
+var pcap = require('pcap2');// packet sniffer
+var inert = require('inert');// displays static content with hapi
+var Good = require('good');// logging routes module for backend
+var config = require('./configVars'); // system object variables
+var server = new Hapi.Server();// create the Hapi server objecgt
 	// Server Connection Port
-	server.connection({ port: 4000 });
-var Test = require('./speedtest');
-var io = require('socket.io')(server.listener);
-var nmap = require('libnmap');
-var users = require('./users');
-var ping = require('./ping');
-var netstat = require('./netstat');
-var airport = require('./airport');
-var options = require('./options');
-const Good = require('good');
-var utils = require('./utils');
-// Determine if debug mode is turned on
-utils.debug('Is Debug Mode On?', process.env.DEBUG);
+	server.connection({ port: config.server_port });// create server connection port
+var Test = require('./speedtest');// speed test module
+var io = require('socket.io')(server.listener);// connet hapi with sockets
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// local app modules 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+var ping = require('./ping'); // ping module for discover chain
+var netstat = require('./netstat');// netstat module for server network performance
+var airport = require('./airport');// wifi discover module
+var options = require('./options');// logging options
+var routes = require('./routes');// created routes
+var network = require('./network');// creates peacket and server objects
+var utils = require('./utils');// basic uiltites
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// mongojs build bson error
+//[Error: Cannot find module '../build/Release/bson'] code: 'MODULE_NOT_FOUND'
+// this error does not prevent the app from running
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // create promise to establish server object
 var defineInterfacePromise = new Promise(function(resolve, reject){
@@ -40,7 +52,6 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 			routes.public,
 			routes.bower,
 			routes.loginpost,
-			routes.addUser,
 			routes.devices,
 			routes.server
 		])
@@ -71,7 +82,7 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 			}catch(err){
 				utils.debug('SpeedTest', err);
 			}
-		}, 10000)
+		}, config.speedTestInterval);
 		// ping needs to have its own interval to compensate for nmap run time
 		// there might be a better way to handle this
 		setInterval(function(){
@@ -80,7 +91,7 @@ var defineInterfacePromise = new Promise(function(resolve, reject){
 			}catch(err){
 				utils.debug('Ping kickoff Error', err);
 			}
-		}, 180000);
+		}, config.pingInterval);
 
 	});
 	// start the actual server and console server info

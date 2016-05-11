@@ -15,11 +15,6 @@ honestApp.config(function($stateProvider, $urlRouterProvider){
 			templateUrl: "views/dashboard/overview.html",
 			controller: 'overviewCtrl'
 		})
-		.state('dashboard.settings', {
-			url: "/settings",
-			templateUrl: "views/dashboard/settings.html",
-			controller: 'settingsCtrl'
-		})
 		.state('dashboard.devices', {
 			url: "/devices",
 			templateUrl: "views/dashboard/devices.html",
@@ -38,22 +33,4 @@ honestApp.config(function($stateProvider, $urlRouterProvider){
 
 
 
-var socket = io()
-// socket.on('connection', function(serverInfo){
-// 	console.log(serverInfo);
-// });
-
-// socket.on('stream', function(packetStream){
-// 	console.log(packetStream)
-// })
-
-
-
-// socket.on('bandwidth', function(bandwidth){
-// 	console.log('hello from appjs bandwidth')
-// 	// console.log(bandwidth)
-// })
-
-// socket.on('namp', function(report){
-// 	console.log(report);
-// })
+var socket = io();

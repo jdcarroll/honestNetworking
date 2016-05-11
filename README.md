@@ -45,3 +45,10 @@ Once all modules are installed run gulp and it wll kick off
 ```
 $ gulp
 ```
+
+## Login To App
+
+its super secret so please don't tell anyone.
+
+username : admin
+password : password

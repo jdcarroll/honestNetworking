@@ -1,9 +1,10 @@
 var network = require('../network');
 var airport = require('../airport');
 var devices = require('../devices');
+var utils = require('../utils');
 // console.log('server_interface from routes:',server_interface);
 module.exports = (function(server_interface){
-
+	// pass forward all files in the public directory
 	_publicDir = {
 		method: 'GET',
 		path: '/{param*}',
@@ -13,7 +14,7 @@ module.exports = (function(server_interface){
 			}
 		}
 	}
-
+	// when you land on /dashboard/server bring wifis forward
 	_server = {
 		method : 'GET',
 		path : '/dashboard/server',
@@ -27,10 +28,10 @@ module.exports = (function(server_interface){
 		method: 'GET',
 		path: '/dashboard',
 		handler: function(req, res){
-			res(network.server.activeInterface());
+			// future plans to use this route but currently doing nothing with it because it is handled with sockets
 		}
 	}
-
+	// grab all devices in the database and push forward
 	_devices = {
 		method: 'GET',
 		path: '/dashboard/devices',
@@ -40,15 +41,7 @@ module.exports = (function(server_interface){
 			// this way I can execute the response from within the the waterfall object
 		}
 	}
-
-	_addUser = {
-		method: 'POST',
-		path: '/addUser',
-		handler: function(req, res){
-			console.log(req.payload);
-		}
-	}
-
+	// push forward bower_components
 	_bower = {
 		method: 'GET',
 		path: '/bower/{param*}',
@@ -58,7 +51,7 @@ module.exports = (function(server_interface){
 			}
 		}
 	}
-
+	// to login as admin
 	_loginpost = {
 		method: 'POST',
 		path: '/loginpost',
@@ -72,16 +65,15 @@ module.exports = (function(server_interface){
 				var hash = 'dfgjfghnytfguhdfdfgndfgjdfgjsdfjhsrtuserakadfh';
 				res(hash);
 			}else {
-				console.log(user);
+				utils.debug('Failed User Attempt', user);
 			}
 		}
 	}
-
+	// export out all routes
 	return {
 		public : _publicDir,
 		bower : _bower,
 		loginpost: _loginpost,
-		addUser: _addUser,
 		devices: _devices,
 		server : _server
 	}
