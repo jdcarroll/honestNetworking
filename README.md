@@ -12,6 +12,8 @@ As of right now this application will only run on MAC OSX.  I am working on the 
 
 Honest Networking requires node version 5.1.1 or higher to successfull do packet anyalis as it relies on [Pcap2](https://github.com/andygreenegrass/node-pcap)
 
+Honest Networking also requires MongoDB so make sure you install that instructions found [here](https://docs.mongodb.com/v3.2/installation/)
+
 
 ## Install Honest Networking
 
