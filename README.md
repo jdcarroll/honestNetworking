@@ -20,7 +20,7 @@ Honest Networking also requires MongoDB so make sure you install that instructio
 #### Step 1 Add Symlink for airport
 
 ```
-$ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport/usr/local/bin/airport
+$ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
 
 ```
 
