@@ -14,6 +14,7 @@ Honest Networking requires node version 5.1.1 or higher to successfull do packet
 
 Honest Networking also requires MongoDB so make sure you install that instructions found [here](https://docs.mongodb.com/v3.2/installation/)
 
+Honest Networking also requires Nmap and the intructions on how to install can be found [here](https://nmap.org/book/inst-macosx.html)
 
 ## Install Honest Networking
 
