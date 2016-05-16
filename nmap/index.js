@@ -28,9 +28,9 @@ var computer = function(computer, socket){
 				if (error){
 					utils.debug('Parse String from Nmap:', error);
 				}
-					// try to JSONParse 
-					var portData = result.nmaprun.host[0].ports;
 					try{
+						// try to JSONParse 
+						var portData = result.nmaprun.host[0].ports;
 						for(var i = 0; i < portData[0].port.length; i++){
 							var portIterator = portData[0].port[i].service[0];
 	// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=						
@@ -79,7 +79,14 @@ var computer = function(computer, socket){
 	// using port information to discover devices =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=	
 						}
 					}catch(err){
-						utils.debug('Cant Parse Nmap Scan Error' ,err);
+						possibleProblems = {
+							problem : {
+								descripter : 'Is Nmap installed',
+								solution : 'go here : https://nmap.org/book/inst-macosx.html and install the dowloadable executable'
+							}
+						}
+						utils.debug('Cant Parse Nmap Scan Error' , err);
+						utils.debug('try this for a solution', possibleProblems);
 					}
 			})
 			resolve(device);
