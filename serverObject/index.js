@@ -79,6 +79,7 @@ var _server = {
 
 			}
 		// return finished server object
+		utils.debug('server object', globalInterface);
 		return globalInterface;
 	}
 }

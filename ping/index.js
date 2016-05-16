@@ -4,6 +4,7 @@
 // requuire modules
 var shell = require('shelljs');// perform command line action
 var arp = require('../arp');// next step in chain
+var utils = require('../utils');
 var ping = function(server_interface, socket){
 	//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 	// Determine broadcast address

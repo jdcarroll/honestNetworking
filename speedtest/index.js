@@ -22,6 +22,10 @@ var Test = function(socket){
 			// store in database
 			db.speedTest.save(data);
 		})
+
+		_test.on('error', function(err){
+			utils.debug('speedTest Error', err);
+		})
 	// if Error console out only in debug mode
 	}catch(err){
 		utils.debug('speedTest run error', err);
