@@ -39,7 +39,8 @@
     "shelljs": "^0.7.0",
     "socket.io": "^1.4.6",
     "socket.io-client": "^1.4.5",
-    "speedtest-net": "^1.2.5"
+    "speedtest-net": "^1.2.5",
+    "xml2js": "^0.4.16"
   },
   "devDependencies": {
     "del": "^2.2.0",
