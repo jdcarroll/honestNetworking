@@ -132,7 +132,7 @@ if [ ! -d "bower_components" ]; then
 	echo 'installing bower components'
 	echo '==================================='
 
-	sudo bower install
+	sudo bower install --allow-root
 
 fi
 # launching app
