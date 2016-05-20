@@ -98,6 +98,9 @@ wait &
 }
 # check and verify that node-gyp is installed to supoort socket watcher
 command -v node-gyp >/dev/null 2>&1 || {
+	echo '==================================='
+	echo 'installing Global Node-gyp'
+	echo '==================================='
 	npm install -g node-gyp
 }
 # Check and verifying that gulp is installed globally
@@ -129,7 +132,7 @@ if [ ! -d "bower_components" ]; then
 	echo 'installing bower components'
 	echo '==================================='
 
-	bower install
+	sudo bower install
 
 fi
 # launching app
