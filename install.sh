@@ -96,6 +96,10 @@ sudo mongod 1>>log/mongodb.log
 wait &  
 
 }
+# check and verify that node-gyp is installed to supoort socket watcher
+command -v node-gyp >/dev/null 2>&1 || {
+	npm install -g node-gyp
+}
 # Check and verifying that gulp is installed globally
 command -v gulp >/dev/null 2>&1 || {
 	echo '==================================='
