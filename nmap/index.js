@@ -26,7 +26,10 @@ var computer = function(computer, socket){
 			parseString(stdout, function mainScan(error, result){
 				// if error exists and debug mode is on console error
 				if (error){
-					utils.debug('Parse String from Nmap:', error);
+					if(error === "[TypeError: Cannot read property '0' of undefined]"){
+						utils.debug('Device not discoverable yet Profile required', computer);
+					}
+					utils.debug('Nmap Parse Error', error);
 				}
 					try{
 						// try to JSONParse 

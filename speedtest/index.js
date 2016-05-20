@@ -24,7 +24,13 @@ var Test = function(socket){
 		})
 
 		_test.on('error', function(err){
-			utils.debug('speedTest Error', err);
+			try{
+				if(err.code === 'ENOTFOUND'){
+					utils.debug('External Speed Test Server not Responding', err);
+				}
+			}catch(err){
+				utils.debug('speedTest Error', err);
+			}
 		})
 	// if Error console out only in debug mode
 	}catch(err){

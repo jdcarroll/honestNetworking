@@ -1,60 +1,66 @@
-#! bin/bash
+#!/bin/bash
 # Install Script for Honet Networking
 
 echo 'Install Script for Honet Networking'
 echo '==================================='
 
-echo 'checking and downloading Nmap'
-
-curl -o nmap.dmg https://nmap.org/dist/nmap-7.12.dmg
-
-sudo hdiutil attach Nmap.dmg
-
-sudo installer -pkg /Volumes/nmap-7.12/nmap-7.12.mpkg -target /
-
-rm -rf nmap.dmg
-
-sudo hdiutil detach /Volumes/nmap-7.12/
-
-echo '==================================='
-echo 'Nmap install complete'
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
 echo ''
 echo ''
 echo ''
 echo ''
 echo '==================================='
-echo 'installing Node'
+echo 'Checking and downloading Nmap'
+command -v nmap >/dev/null 2>&1 || {
+	# download nmap from there website
+	curl -o nmap.dmg https://nmap.org/dist/nmap-7.12.dmg
+	# mount the nmap disk
+	sudo hdiutil attach Nmap.dmg
+	# run the nmap installer and set the install location to /
+	sudo installer -pkg /Volumes/nmap-7.12/nmap-7.12.mpkg -target /
+	# remove the downloaded installer file
+	rm -rf nmap.dmg
+	# unmount install disk
+	sudo hdiutil detach /Volumes/nmap-7.12/
+	echo '==================================='
+	echo 'Nmap install complete'
+}
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'installing airport symlink'
+echo '==================================='
+# create symlink to enable airport module 
+sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
+
+echo '==================================='
+echo 'symlink created'
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'installing Node Version Manager'
 echo '==================================='
 
-curl -o node.pkg https://nodejs.org/dist/v4.4.4/node-v4.4.4.pkg 
+command -v nvm >/dev/null 2>&1 || {
+	
+	echo 'installing node version manager'
 
-sudo installer -pkg node.pkg -target /
+	curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+	echo '==================================='
+	echo 'Node install complete'
+}
 
-rm -rf node.pkg
+echo ''
+nvm use system
+
+nvm install 5.1.1
+
+nvm use 5.1.1
 
 
-echo '==================================='
-echo 'Node install complete'
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
 echo ''
 echo ''
 echo ''
@@ -63,58 +69,80 @@ echo '==================================='
 echo 'installing MongoDB'
 echo '==================================='
 
-curl -O https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-3.0.12.tgz
+command -v mongo >/dev/null 2>&1 || {
+	curl -O https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-3.0.12.tgz
 
-tar -zxvf mongodb-osx-x86_64-3.0.12.tgz
+	tar -zxvf mongodb-osx-x86_64-3.0.12.tgz
 
-sudo mkdir -p /data/db/
+	rm -rf mongodb-osx-x86_64-3.0.12.tgz
 
-sudo mkdir mongodb 
+	sudo mkdir -p /data/db/
 
-cp -R -n mongodb-osx-x86_64-3.0.12/ mongodb
+	sudo mkdir mongodb 
 
-export PATH=mongodb/bin:$PATH
+	sudo cp -R -n mongodb-osx-x86_64-3.0.12/ mongodb
+
+	rm -rf mongodb-osx-x86_64-3.0.12
+
+	export PATH=mongodb/bin:$PATH
+
+	echo '==================================='
+	echo 'MongoDB install complete'
+}
 
 
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'starting mongodb'
+echo '==================================='
 
+mongod &
 
+echo ''
+echo 'Mongodb Started'
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'installing Global NPM Modules'
+echo '==================================='
 
+npm install -g gulp
+npm install -g bower
 
-# # checking to verify that mongo db is installed
-# if command -v mongo ; then
-# 	echo 'MongoDB already Installed'
-# else
-# 	echo 'MongoDB not installed'
-# fi
-# echo ''
-# echo '==================================='
-# echo ''
-# # checking if node is installed
-# if command -v node ; then
-# 	echo 'node is already installed'
-# fi
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'installing NPM Modules'
+echo '==================================='
 
-# # check and verify that node is set to correct version
-# if "node --version" == 'v5.1.1' ; then
-# 	echo 'downloading and installing node v5.1.1'
-# 	nvm install 5.1.1
-# 	# nvm use 5.1.1
-# 	# echo 'switched versions'
-# 	node --version
-# else 
-# 	echo 'not equal'
-# fi
+npm install
 
-# echo ''
-# echo '==================================='
-# echo ''
-# # checking if node version manager is installed
-# if command -v nvm ; then
-# 	echo 'NVM installed'
-# 	echo 'checking version...'
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'installing bower components'
+echo '==================================='
 
-# else
-# 	echo 'running npm install'
-# 	npm install -g nvm
-# fi
+bower install
+
+echo ''
+echo ''
+echo ''
+echo ''
+echo '==================================='
+echo 'launching app'
+echo '==================================='
+
+DEBUG=true gulp &
+
+open "http://localhost:4000"
 
