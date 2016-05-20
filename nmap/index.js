@@ -29,7 +29,6 @@ var computer = function(computer, socket){
 					if(error === "[TypeError: Cannot read property '0' of undefined]"){
 						utils.debug('Device not discoverable yet Profile required', computer);
 					}
-					utils.debug('Nmap Parse Error', error);
 				}
 					try{
 						// try to JSONParse 
