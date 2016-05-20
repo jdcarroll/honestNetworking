@@ -36,6 +36,7 @@
     "node-nmap": "^3.0.1",
     "passport-local": "^1.0.0",
     "pcap2": "^3.0.4",
+    "shelljs": "^0.7.0",
     "socket.io": "^1.4.6",
     "socket.io-client": "^1.4.5",
     "speedtest-net": "^1.2.5"
