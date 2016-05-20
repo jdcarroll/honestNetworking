@@ -1,15 +1,11 @@
 #!/bin/bash
 # Install Script for Honet Networking
-
+rm -rf log
+mkdir log
 echo 'Install Script for Honet Networking'
 echo '==================================='
+read -r -p "Do you want Error Mode on? [y/N] " errorMode
 
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'Checking and downloading Nmap'
 command -v nmap >/dev/null 2>&1 || {
 	# download nmap from there website
 	curl -o nmap.dmg https://nmap.org/dist/nmap-7.12.dmg
@@ -24,52 +20,51 @@ command -v nmap >/dev/null 2>&1 || {
 	echo '==================================='
 	echo 'Nmap install complete'
 }
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'installing airport symlink'
-echo '==================================='
-# create symlink to enable airport module 
-sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
 
-echo '==================================='
-echo 'symlink created'
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'installing Node Version Manager'
-echo '==================================='
+if [ ! -f /usr/local/bin/airport ]; then
+    echo '==================================='
+	echo 'installing airport symlink'
+	echo '==================================='
+	# create symlink to enable airport module 
+	sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
+
+	echo '==================================='
+	echo 'symlink created'
+fi
 
 command -v nvm >/dev/null 2>&1 || {
-	
-	echo 'installing node version manager'
 
-	curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+	echo $2
+	echo $1
+	
+	echo '==================================='
+	echo 'installing Node Version Manager'
+	echo '==================================='
+
+	curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 1>>log/nvmInstall.log
+	wait 
+	echo '' & nvm install 5.1.1 & nvm use 5.1.1 2>>log/nvmInstall.log
+}
+	echo '==================================='
+	echo 'install node version 5.1.1'
+	echo '===================================' 
+	nvm install 5.1.1 2>>log/nvmInstall.log
+
+	nvm use 5.1.1 2>>log/nvmInstall.log || {
+	echo 'there is something wrong with your node installation'
+	echo '==================================='
+	echo 'solution'
+	echo 'use NVM Node Version Manager'
+	echo 'https://github.com/creationix/nvm'
+	echo 'you need node version 5.1.1 for this project'
 	echo '==================================='
 	echo 'Node install complete'
 }
 
-echo ''
-nvm use system
-
-nvm install 5.1.1
-
-nvm use 5.1.1
-
-
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'installing MongoDB'
-echo '==================================='
-
 command -v mongo >/dev/null 2>&1 || {
+	echo '==================================='
+	echo 'installing MongoDB'
+	echo '==================================='
 	curl -O https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-3.0.12.tgz
 
 	tar -zxvf mongodb-osx-x86_64-3.0.12.tgz
@@ -89,60 +84,77 @@ command -v mongo >/dev/null 2>&1 || {
 	echo '==================================='
 	echo 'MongoDB install complete'
 }
-
-
-echo ''
-echo ''
-echo ''
-echo ''
 echo '==================================='
 echo 'starting mongodb'
 echo '==================================='
 
-mongod &
+mongod 1>>log/mongodb.log || { 
 
-echo ''
-echo 'Mongodb Started'
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'installing Global NPM Modules'
-echo '==================================='
+echo 'from with in block'
+sudo mongod 1>>log/mongodb.log 
 
-npm install -g gulp
-npm install -g bower
+wait &  
 
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'installing NPM Modules'
-echo '==================================='
+}
+# Check and verifying that gulp is installed globally
+command -v gulp >/dev/null 2>&1 || {
+	echo '==================================='
+	echo 'installing Global Gulp'
+	echo '==================================='
+	npm install -g gulp
+}
+# Check and verifying that bower is installed globally
+command -v bower >/dev/null 2>&1 || {
+	echo '==================================='
+	echo 'installing Global Bower'
+	echo '==================================='
+	npm install -g bower
+}
+# Check and verifying that node_modules are installed
+if [ ! -d "node_modules" ]; then
+  	echo '==================================='
+	echo 'installing NPM Modules'
+	echo '==================================='
 
-npm install
+	npm install
 
-echo ''
-echo ''
-echo ''
-echo ''
-echo '==================================='
-echo 'installing bower components'
-echo '==================================='
+fi
+# Check and verifying that bower_components are installed 
+if [ ! -d "bower_components" ]; then
+	echo '==================================='
+	echo 'installing bower components'
+	echo '==================================='
 
-bower install
+	bower install
 
-echo ''
-echo ''
-echo ''
-echo ''
+fi
+# launching app
 echo '==================================='
 echo 'launching app'
 echo '==================================='
 
-DEBUG=true gulp &
+if [[ $errorMode =~ ^([yY][eE][sS]|[yY])$ ]]
+# launching in error mode
+then
+	echo '==================================='
+	echo 'DEBUG Mode on'
+	echo '==================================='
 
-open "http://localhost:4000"
+	open "http://localhost:4000"
+
+	sudo DEBUG=true gulp
+else
+# launching in normal mode
+	echo '==================================='
+	echo 'DEBUG Mode off'
+	echo '==================================='
+
+	open "http://localhost:4000" 
+
+	sudo gulp 
+fi
+
+
+
+
 

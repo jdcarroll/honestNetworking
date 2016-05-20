@@ -26,9 +26,11 @@ var Test = function(socket){
 		_test.on('error', function(err){
 			try{
 				if(err.code === 'ENOTFOUND'){
-					utils.debug('External Speed Test Server not Responding', err);
+					// Speed Test Server not found for speed test 
+				    // should continue and move on to next test
 				}
 			}catch(err){
+				// if any other error happend inform th user in debug mode
 				utils.debug('speedTest Error', err);
 			}
 		})
