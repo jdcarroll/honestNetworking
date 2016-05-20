@@ -65,7 +65,7 @@ $ gulp
 ```
 ### Known Bugs
 
-1. Nmap does take a few minutes to run and complete so if devices don't load right away.
+1. Nmap does take a few minutes to run and complete so if devices don't load right away just give it a minute.
 
 2. After you run the install script even though the browser gets kicked off you may need to do a page refresh to see the project.
 
