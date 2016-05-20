@@ -4,7 +4,7 @@ rm -rf log
 mkdir log
 echo 'Install Script for Honet Networking'
 echo '==================================='
-read -r -p "Do you want Error Mode on? [y/N] " errorMode
+read -r -p "Do you want DEBUG Mode on? [y/N] " errorMode
 
 command -v nmap >/dev/null 2>&1 || {
 	# download nmap from there website
@@ -108,14 +108,14 @@ command -v gulp >/dev/null 2>&1 || {
 	echo '==================================='
 	echo 'installing Global Gulp'
 	echo '==================================='
-	npm install -g gulp
+	npm install -g gulp 1>log/gulpInstall.log
 }
 # Check and verifying that bower is installed globally
 command -v bower >/dev/null 2>&1 || {
 	echo '==================================='
 	echo 'installing Global Bower'
 	echo '==================================='
-	npm install -g bower
+	npm install -g bower 1>log/bowerGlobalInstall.log
 }
 # Check and verifying that node_modules are installed
 if [ ! -d "node_modules" ]; then
@@ -123,8 +123,8 @@ if [ ! -d "node_modules" ]; then
 	echo 'installing NPM Modules'
 	echo '==================================='
 
-	npm install
-	npm install pcap2
+	npm install 1>log/npmInstall.log
+	npm install pcap2 1>>log/npmInstall.log
 
 fi
 # Check and verifying that bower_components are installed 
@@ -133,7 +133,7 @@ if [ ! -d "bower_components" ]; then
 	echo 'installing bower components'
 	echo '==================================='
 
-	sudo bower install --allow-root
+	sudo bower install --allow-root 1>log/bower_components.log
 
 fi
 # launching app
