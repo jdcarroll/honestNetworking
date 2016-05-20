@@ -1,11 +1,26 @@
 honestApp.controller('devicesCtrl', function($scope, $http, socket){
 	// console.log('Hi from device controller')
+	var data = [];
+	var ips = [];
 	socket.on('newDeviceSocket', function(device){
-		$scope.devices += device;
+		if(ips.indexOf(device.ip)=== -1){
+			data.push(device);
+			ips.push(device.ip);
+			$scope.devices += device;
+		}
+		
 	})
 
 	$http.get('/dashboard/devices').then(function(response) {
-        $scope.devices = response.data;
+		
+		response.data.forEach(function(device){
+			if(ips.indexOf(device.ip)=== -1){
+				data.push(device);
+				ips.push(device.ip);
+			}
+		})
+		console.log('swatts', data);
+        $scope.devices = data;
     }, function errorCallback(response) {
     	console.log(response);
   	});
