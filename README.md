@@ -2,9 +2,9 @@
 # honestNetworking
 ### The complete automated network monitor for local network
 
-#### Temporary Disclaimer
+#### Disclaimer
 
-I am working on building a gulp file that will install the entire environment for you. This way you can just git clone or download the zip and then run gulp. However this is not finished at the moment so we have to do things manually right now.
+This App is a network monitoring tool doing tasks like wifi and device discovery. If used in the wrong way this tool is illegal and you use at your own risk.  I take now legal responsibilty for misuse of this app.
 
 ### System Requirements
 
@@ -16,7 +16,20 @@ Honest Networking also requires MongoDB so make sure you install that instructio
 
 Honest Networking also requires Nmap and the intructions on how to install can be found [here](https://nmap.org/book/inst-macosx.html)
 
-## Install Honest Networking
+## Automatic Install
+
+There is a script called install.sh simply run it.
+```
+$ ./install.sh
+```
+Sometimes with Git executables get there permissions changed. If this is the case.
+```
+$ chmod + x install.sh
+$ ./install.sh
+```
+
+
+## Manual Install Honest Networking
 
 #### Step 1 Add Symlink for airport
 
@@ -50,9 +63,9 @@ Once all modules are installed run gulp and it wll kick off
 ```
 $ gulp
 ```
-### known Bugs
+### Known Bugs
 
 1. Nmap does take a few minutes to run and complete so if devices don't load right away.
 
-2. after you run the install script eventhough the browser kickoff you may need to do a page refresh to see the project.
+2. After you run the install script even though the browser gets kicked off you may need to do a page refresh to see the project.
 
