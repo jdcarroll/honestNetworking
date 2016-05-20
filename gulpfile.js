@@ -5,7 +5,6 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
     imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
     cache = require('gulp-cache'),
@@ -17,18 +16,12 @@ gulp.task('styles', function(){
     return gulp.src('./styles/main.scss') 
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest('public/css'))
-        .pipe(rename({suffix: '.min'}))
-        .pipe(minifycss())
-        .pipe(gulp.dest('public/css'))
         .pipe(notify({ message: 'Styles task complete'}))
 });
 
 gulp.task('scripts', function(){
     return gulp.src('./js/**/*.js')
                .pipe(concat('main.js'))
-               .pipe(gulp.dest('public/js'))
-               .pipe(rename({suffix: '.min'}))
-               .pipe(uglify())
                .pipe(gulp.dest('public/js'))
                .pipe(notify({ message: 'Scripts task complete' }))
 });
