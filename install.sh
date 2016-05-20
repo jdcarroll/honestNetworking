@@ -124,6 +124,7 @@ if [ ! -d "node_modules" ]; then
 	echo '==================================='
 
 	npm install
+	npm install pcap2
 
 fi
 # Check and verifying that bower_components are installed 
