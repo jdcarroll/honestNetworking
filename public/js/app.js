@@ -2,10 +2,6 @@ var honestApp = angular.module('honest', ["ui.router"])
 	
 honestApp.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider
-		.state('login', {
-			url: "/login",
-			templateUrl: "views/login.html"
-		})
 		.state('dashboard', {
 			url: "/dashboard",
 			templateUrl: "views/dashboard/dashboard.html"

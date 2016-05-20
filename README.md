@@ -50,11 +50,9 @@ Once all modules are installed run gulp and it wll kick off
 ```
 $ gulp
 ```
+### known Bugs
 
-## Login To App
+1. Nmap does take a few minutes to run and complete so if devices don't load right away.
 
-its super secret so please don't tell anyone.
+2. after you run the install script eventhough the browser kickoff you may need to do a page refresh to see the project.
 
-username : admin
-
-password : password
