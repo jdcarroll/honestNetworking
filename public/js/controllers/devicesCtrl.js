@@ -1,7 +1,26 @@
 honestApp.controller('devicesCtrl', function($scope, $http, socket){
-	// console.log('Hi from device controller')
 	var data = [];
 	var ips = [];
+	// console.log('Hi from device controller')
+	socket.on('ping_status', function(data){
+		// display status of device discovery
+
+	})
+	var count = 1;
+	$scope.jeff = function(){
+		
+		if(data.length === 0){
+			console.log(data.length);
+			console.log('display = true');
+			count = 0;
+		}else{
+			console.log('display = false');
+			count = 1;
+		}
+		
+	}
+
+	
 	socket.on('newDeviceSocket', function(device){
 		if(ips.indexOf(device.ip)=== -1){
 			data.push(device);
@@ -19,7 +38,6 @@ honestApp.controller('devicesCtrl', function($scope, $http, socket){
 				ips.push(device.ip);
 			}
 		})
-		console.log('swatts', data);
         $scope.devices = data;
     }, function errorCallback(response) {
     	console.log(response);

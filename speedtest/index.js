@@ -9,10 +9,11 @@ var config = require('../configVars');// config vars
 // The test function
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 var Test = function(socket){
-	// configure the speed test alotted time 
-	var _test = speedTest({maxTime: config.speedTest_maxtime});
-	// wrapped in a try catch to handle any erros that could force the app to crash
+	// wrapped in a try catch to handle any errors that could force the app to crash
 	try{
+		// configure the speed test alotted time 
+		var _test = speedTest({maxTime: config.speedTest_maxtime});
+	
 		// when data get returned
 		_test.on('data', function(data) {
 			// send it off to the front end

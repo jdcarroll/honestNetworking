@@ -4,18 +4,75 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-4" ng-repeat="device in devices track by $index">
+	<div class="Devices">
+		<div class="col-lg-4" ng-repeat="device in devices track by $index">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{{ device.hostname }}
+				</div>
+				<div class="panel-body">
+					<ul>
+						<li>Type : {{ device.type }}</li>
+						<li>OS : {{ device.ostype }}</li>
+						<li>ip address: {{ device.ip }} </li>
+						<li>Mac address: {{ device.mac }}  </li>
+						<li>CPE : {{ device.cpe }}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<button ng-click="jeff()">Jeff</button>
+
+<div class="row">
+	<div class="honest_timeline">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				{{ device.hostname }}
+				<i class="fa fa-clock-o fa-fw"></i>Device Discovery Timeline
 			</div>
 			<div class="panel-body">
-				<ul>
-					<li>Type : {{ device.type }}</li>
-					<li>OS : {{ device.ostype }}</li>
-					<li>ip address: {{ device.ip }} </li>
-					<li>Mac address: {{ device.mac }}  </li>
-					<li>CPE : {{ device.cpe }}</li>
+				<ul class="timeline">
+					<li>
+						<div class="timeline-badge">
+							<i class="fa fa-check"></i>
+						</div>
+						<div class="timeline-panel">
+							<div class="timeline-heading">
+								<h4 class="timeline-title">Ping Subnet</h4>
+							</div>
+							<div class="timeline-body">
+								Sending broadcast signal to the network and verifying who responds. All devices on the system will be defualt respond with there mac address and ip address.
+							</div>
+						</div>
+					</li>
+					<li class="timeline-inverted">
+						<div class="timeline-badge">
+							<i class="fa fa-check"></i>
+						</div>
+						<div class="timeline-panel">
+							<div class="timeline-heading">
+								<h4 class="timeline-title">Grab Data From Arp Table</h4>
+							</div>
+							<div class="timeline-body">
+								When a broadcast signal gets sent accross the network the devices that see this this broadcast signal respond with there mac address and ip address. The device sending the broadcast signal then takes the response and stores that data in what is called and arp table. This process pulls that data from the table annd parses it making the data usable for that system
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="timeline-badge">
+							<i class="fa fa-check"></i>
+						</div>
+						<div class="timeline-panel">
+							<div class="timeline-heading">
+								<h4 class="timeline-title">Nmap Scan</h4>
+							</div>
+							<div class="timeline-body">
+								This takes the computer object pulled from the arp table and runs a system scan on each ipadress. This scan will reveal the hostname of th device along with all open ports found on that sytem.
+							</div>
+						</div>
+					</li>
 				</ul>
 			</div>
 		</div>

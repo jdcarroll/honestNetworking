@@ -15,6 +15,8 @@ var arp = function(server_interface, socket){
 		shell.exec("arp -a", {silent:true}, function(code, stdout, stderr){ 
 			// stdout is a string converting to array on new line
 			var output = stdout.split('\n');
+			// output data in debug mode when arp runs
+			utils.debug('Arp Results', output);
 			// getting rid of last element in array as it is extraneous
 			output.pop();
 			// establishing container array for all lines as pout from arp

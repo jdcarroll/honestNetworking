@@ -21,13 +21,12 @@ honestApp.controller('overviewCtrl', function($scope, socket){
 	var myLiveChart = new Chart(ctx).Line(startingData, {animationSteps: 20});
 
 	socket.on('speed_test', function(speed){
-		// console.log('speed test results')
+
 		$scope.speedTest = speed;
 		// console.log(speed)
 	})
 
 	socket.on('bandwidth', function(bandwidth){
-		// console.log('hello from overviewCtrl bandwidth');
 		format = timeConverter(bandwidth.time);
 		myLiveChart.addData([bandwidth.speed], format.time);
 		myLiveChart.removeData();
