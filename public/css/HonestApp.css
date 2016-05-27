@@ -2,6 +2,10 @@ body{
 	background-color: #7F1624;
 }
 
+small.ng-binding {
+	color : white;
+}
+
 .panel-default > .panel-heading {
 	background-color: #7F1624;
 	color: #E9E5D9;
