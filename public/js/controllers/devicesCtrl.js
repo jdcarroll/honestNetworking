@@ -1,5 +1,5 @@
 honestApp.controller('devicesCtrl', function($scope, $http, socket){
-	// console.log('Hi from device controller')
+
 	var data = [];
 	var ips = [];
 	socket.on('newDeviceSocket', function(device){
@@ -19,7 +19,6 @@ honestApp.controller('devicesCtrl', function($scope, $http, socket){
 				ips.push(device.ip);
 			}
 		})
-		console.log('swatts', data);
         $scope.devices = data;
     }, function errorCallback(response) {
     	console.log(response);
