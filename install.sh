@@ -88,14 +88,8 @@ echo '==================================='
 echo 'starting mongodb'
 echo '==================================='
 
-mongod 1>>log/mongodb.log || { 
+sudo mongod 1>>log/mongodb.log wait & 
 
-echo 'from with in block'
-sudo mongod 1>>log/mongodb.log 
-
-wait &  
-
-}
 # check and verify that node-gyp is installed to supoort socket watcher
 command -v node-gyp >/dev/null 2>&1 || {
 	echo '==================================='
